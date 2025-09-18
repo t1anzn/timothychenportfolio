@@ -36,7 +36,7 @@ const projects = [
     tech: ["Arduino", "React Native", "MQTT", "Firebase"],
     status: "Completed",
     year: "2024",
-    image: "/mobile-app-community-interface-mockup.jpg",
+    image: "/smartwateringmockup.png",
     slug: "smart-watering-system",
   },
   {
@@ -44,7 +44,7 @@ const projects = [
     tech: ["React", "Tailwind", "Framer Motion"],
     status: "Live",
     year: "2024",
-    image: "/minimalist-portfolio.png",
+    image: "/webportfoliomockup1.png",
     slug: "portfolio-website",
   },
 ];
@@ -55,6 +55,12 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(0);
   const [codeText, setCodeText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    body: "",
+  });
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
 
   const projectsPerPage = 4;
@@ -193,6 +199,23 @@ export default function Home() {
         block: "start",
       });
     }
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSendEmail = (e: React.FormEvent) => {
+    e.preventDefault();
+    const mailto = `mailto:timothy.chen188@gmail.com?subject=${encodeURIComponent(
+      formData.subject
+    )}&body=${encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.body}`
+    )}`;
+    window.location.href = mailto;
   };
 
   return (
@@ -841,12 +864,7 @@ export default function Home() {
 
               <div className="max-w-2xl mx-auto" data-animate>
                 <div className="bg-background border border-border rounded-3xl p-8 shadow-lg">
-                  <form
-                    action={`mailto:timothy.chen188@gmail.com`}
-                    method="post"
-                    encType="text/plain"
-                    className="space-y-6"
-                  >
+                  <form onSubmit={handleSendEmail} className="space-y-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <label
@@ -860,6 +878,8 @@ export default function Home() {
                           id="name"
                           name="name"
                           required
+                          value={formData.name}
+                          onChange={handleInputChange}
                           className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 shadow-sm"
                           placeholder="Your name"
                         />
@@ -876,6 +896,8 @@ export default function Home() {
                           id="email"
                           name="email"
                           required
+                          value={formData.email}
+                          onChange={handleInputChange}
                           className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 shadow-sm"
                           placeholder="your.email@example.com"
                         />
@@ -894,6 +916,8 @@ export default function Home() {
                         id="subject"
                         name="subject"
                         required
+                        value={formData.subject}
+                        onChange={handleInputChange}
                         className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 shadow-sm"
                         placeholder="What's this about?"
                       />
@@ -901,16 +925,18 @@ export default function Home() {
 
                     <div className="space-y-2">
                       <label
-                        htmlFor="message"
+                        htmlFor="body"
                         className="text-sm font-medium text-foreground"
                       >
                         Message
                       </label>
                       <textarea
-                        id="message"
+                        id="body"
                         name="body"
                         rows={6}
                         required
+                        value={formData.body}
+                        onChange={handleInputChange}
                         className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 resize-none shadow-sm"
                         placeholder="Tell me about your project or idea..."
                       />

@@ -102,31 +102,52 @@ const projects = [
   },
   {
     title: "Smart IoT Watering System",
-    tech: ["Arduino", "React Native", "MQTT", "Firebase"],
+    tech: ["Arduino", "Expo Go", "React Native", "MQTT", "Firebase"],
     status: "Completed",
     year: "2024",
     category: "IoT Hardware Project",
     images: [
       {
-        src: "/mobile-app-community-interface-mockup.jpg",
+        src: "/smartwateringmockup.png",
         alt: "IoT Watering System app",
         caption: "Mobile interface for monitoring plant health",
+      },
+      {
+        src: "/circuitdiagram.png",
+        alt: "Circuit diagram of the Smart IoT Watering System",
+        caption: "Circuit diagram of the Smart IoT Watering System",
+      },
+      {
+        src: "/labelledwatering.png",
+        alt: "Labelled prototype of the Smart IoT Watering System circuit",
+        caption: "Labelled prototype of the Smart IoT Watering System circuit",
+      },
+      {
+        src: "/ultrasoniclabelled.png",
+        alt: "Labelled ultrasonic sensor system",
+        caption: "Labelled ultrasonic sensor system",
+      },
+      {
+        type: "video",
+        src: "/wateringshowcase.mp4",
+        alt: "Smart IoT Watering System demo video",
+        caption: "Live demonstration of the Smart IoT Watering System features",
       },
     ],
     slug: "smart-watering-system",
     description:
-      "An IoT-based automated plant watering system that monitors soil moisture, weather conditions, and plant health to provide optimal watering schedules.",
+      "An IoT-based automated plant watering system that monitors soil moisture and plant health to provide optimal watering schedules, through a mobile app interface.",
     features: [
       "Automated watering based on soil moisture",
-      "Weather API integration",
       "Mobile app for remote monitoring",
+      "Remote watering control",
       "Real-time sensor data visualization",
-      "Plant health tracking",
-      "Water usage analytics",
+      "Firebase integration for long-term data storage",
+      "Plant moisture and water usage analytics",
     ],
     challenges:
-      "Ensuring reliable hardware communication and handling network connectivity issues.",
-    github: "https://github.com/timothychen01/smart-watering-system",
+      "Ensuring reliable hardware communication, handling effective data transmission between devices, and addressing network connectivity issues.",
+    github: "https://github.com/t1anzn/SmartWateringCompanion",
     demo: null,
   },
   {
@@ -137,9 +158,19 @@ const projects = [
     category: "Portfolio Website",
     images: [
       {
-        src: "/minimalist-portfolio.png",
-        alt: "Portfolio Website interface",
-        caption: "Clean, minimalist design with smooth animations",
+        src: "/portfoliomacmockup.png",
+        alt: "MacBook mockup showcasing the portfolio website",
+        caption: "MacBook mockup showcasing the portfolio website",
+      },
+      {
+        src: "/webportfoliomockup2.png",
+        alt: "Web Portfolio mockup showcasing the page designs ",
+        caption: "Web Portfolio mockup showcasing the page designs ",
+      },
+      {
+        src: "/webportfoliomockup1.png",
+        alt: "Web Portfolio mockup showing the landing page",
+        caption: "Web Portfolio mockup showing the landing page",
       },
     ],
     slug: "portfolio-website",
@@ -154,7 +185,7 @@ const projects = [
       "Contact form integration",
     ],
     challenges:
-      "Balancing visual appeal with performance optimization and ensuring accessibility across all interactions.",
+      "Visual design consistency, responsive layout across devices and screen sizes.",
     github: "https://github.com/timothychen01/portfolio",
     demo: "https://timothychen.dev",
   },
@@ -283,17 +314,30 @@ export default function ProjectPage({
         }
 
         /* Mobile app video optimization */
-        .image-container video[src*="MVP1"] {
+        .image-container video[src*="MVP1"],
+        .image-container video[src*="wateringshowcase"] {
           max-width: 400px;
           max-height: 600px;
           width: auto;
           margin: 0 auto;
         }
-
+        .image-container img[src*="ultrasoniclabelled"] {
+          max-width: 350px;
+          max-height: 600px;
+          width: auto;
+          height: auto;
+          margin: 0 auto;
+          display: block;
+        }
         @media (max-width: 640px) {
-          .image-container video[src*="MVP1"] {
+          .image-container video[src*="MVP1"],
+          .image-container video[src*="wateringshowcase"] {
             max-width: 280px;
             max-height: 500px;
+          }
+          .image-container img[src*="ultrasoniclabelled"] {
+            max-width: 220px;
+            max-height: 400px;
           }
         }
       `}</style>
