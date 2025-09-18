@@ -35,7 +35,7 @@ export default function Home() {
       tech: ["React Native", "TypeScript", "Firebase", "Gemini API"],
       status: "In Progress",
       year: "2025",
-      image: "/clean-e-commerce-product-page-design.jpg",
+      image: "/clarifymockup.png",
       slug: "ai-study-companion",
     },
     {

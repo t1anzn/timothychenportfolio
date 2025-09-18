@@ -18,6 +18,7 @@ const projects = [
     ],
     status: "Completed",
     year: "2025",
+    category: "Full Stack Web Application",
     images: [
       {
         src: "/cinemindmainlong.png",
@@ -65,27 +66,38 @@ const projects = [
     tech: ["React Native", "TypeScript", "Firebase", "Gemini API"],
     status: "In Progress",
     year: "2025",
+    category: "Mobile Application",
     images: [
       {
-        src: "/clean-e-commerce-product-page-design.jpg",
+        src: "/clarifymockup.png",
         alt: "AI Study Companion interface",
         caption: "Mobile app interface for study management",
+      },
+      {
+        src: "/clarifyiphone.png",
+        alt: "AI Study Companion interface",
+        caption: "Mobile app interface for study management",
+      },
+      {
+        type: "video",
+        src: "/MVP1.mp4",
+        alt: "AI Study Companion demo video",
+        caption: "Live demonstration of the AI Study Companion app features",
       },
     ],
     slug: "ai-study-companion",
     description:
-      "An intelligent mobile study companion that helps students organize their learning materials, create study schedules, and get AI-powered assistance with their studies.",
+      "An intelligent mobile study companion that allows students to take photos of their study materials and create simple, easy-to-understand study packs.",
     features: [
-      "AI-powered study recommendations",
+      "Image recognition for extracting text from study materials",
       "Smart flashcard generation",
-      "Progress tracking and analytics",
-      "Offline study mode",
-      "Cross-platform mobile app",
-      "Cloud synchronization",
+      "Simplified explanations of complex topics",
+      "Study pack creation and management",
+      "Tagging and categorization of study materials",
+      "Filtering and search functionality",
     ],
     challenges:
-      "Optimizing AI responses for mobile devices and ensuring offline functionality.",
-    github: "https://github.com/timothychen01/ai-study-companion",
+      "Prompt engineering for generating effective AI study materials, and formatting extracted text from images accurately.",
     demo: null,
   },
   {
@@ -93,6 +105,7 @@ const projects = [
     tech: ["Arduino", "React Native", "MQTT", "Firebase"],
     status: "GitHub",
     year: "2024",
+    category: "IoT Hardware Project",
     images: [
       {
         src: "/mobile-app-community-interface-mockup.jpg",
@@ -117,66 +130,11 @@ const projects = [
     demo: null,
   },
   {
-    title: "Community Mobile App",
-    tech: ["React Native", "Firebase"],
-    status: "Award Winner",
-    year: "2022",
-    images: [
-      {
-        src: "/mobile-app-community-interface-mockup.jpg",
-        alt: "Community Mobile App interface",
-        caption: "Award-winning community engagement platform",
-      },
-    ],
-    slug: "community-mobile-app",
-    description:
-      "A community-focused mobile application that won first place in a local hackathon. Connects neighbors and facilitates local community engagement through events, services, and discussions.",
-    features: [
-      "Local community discovery",
-      "Event organization and management",
-      "Neighbor-to-neighbor services",
-      "Real-time messaging",
-      "Location-based features",
-      "Community bulletin board",
-    ],
-    challenges:
-      "Building trust and safety features while maintaining user privacy and community engagement.",
-    github: "https://github.com/timothychen01/community-app",
-    demo: null,
-  },
-  {
-    title: "Data Visualization Dashboard",
-    tech: ["TypeScript", "D3.js", "Express"],
-    status: "In Progress",
-    year: "2024",
-    images: [
-      {
-        src: "/data-dashboard-charts.png",
-        alt: "Data Visualization Dashboard",
-        caption: "Interactive charts and analytics interface",
-      },
-    ],
-    slug: "data-visualization-dashboard",
-    description:
-      "An interactive data visualization dashboard that transforms complex datasets into intuitive, interactive charts and graphs for business intelligence and analytics.",
-    features: [
-      "Interactive data visualizations",
-      "Real-time data updates",
-      "Customizable dashboard layouts",
-      "Multiple chart types and formats",
-      "Data export capabilities",
-      "Responsive design",
-    ],
-    challenges:
-      "Handling large datasets efficiently and creating smooth animations for complex visualizations.",
-    github: "https://github.com/timothychen01/data-viz-dashboard",
-    demo: null,
-  },
-  {
     title: "Portfolio Website",
     tech: ["React", "Tailwind", "Framer Motion"],
     status: "Live",
     year: "2024",
+    category: "Portfolio Website",
     images: [
       {
         src: "/minimalist-portfolio.png",
@@ -362,6 +320,21 @@ export default function ProjectPage({
           height: auto;
           object-fit: contain;
         }
+
+        /* Mobile app video optimization */
+        .image-container video[src*="MVP1"] {
+          max-width: 400px;
+          max-height: 600px;
+          width: auto;
+          margin: 0 auto;
+        }
+
+        @media (max-width: 640px) {
+          .image-container video[src*="MVP1"] {
+            max-width: 280px;
+            max-height: 500px;
+          }
+        }
       `}</style>
 
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border/30">
@@ -503,17 +476,23 @@ export default function ProjectPage({
                 View Demo
               </a>
             )}
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 border border-border rounded-lg font-medium hover:border-primary/50 hover:bg-primary/5 transition-all duration-300"
-            >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-              </svg>
-              View Code
-            </a>
+            {project.github && (
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-border rounded-lg font-medium hover:border-primary/50 hover:bg-primary/5 transition-all duration-300"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                </svg>
+                View Code
+              </a>
+            )}
           </div>
         </div>
 
@@ -554,12 +533,12 @@ export default function ProjectPage({
             {/* Thumbnail Navigation */}
             {project.images.length > 1 && (
               <div className="space-y-4">
-                <div className="flex items-center justify-center gap-3 overflow-x-auto pb-2">
+                <div className="flex items-center justify-center gap-3 overflow-x-auto pb-2 px-2 py-2">
                   {project.images.map((image, index) => (
                     <button
                       key={index}
                       onClick={() => goToImage(index)}
-                      className={`relative flex-shrink-0 w-20 h-12 overflow-hidden rounded-lg border-2 transition-all duration-300 ${
+                      className={`relative flex-shrink-0 w-24 h-14 overflow-hidden rounded-lg border-2 transition-all duration-300 ${
                         currentImageIndex === index
                           ? "border-primary shadow-lg scale-110"
                           : "border-border/30 hover:border-primary/50 hover:scale-105"
@@ -571,17 +550,11 @@ export default function ProjectPage({
                       {(image as any).type === "video" ? (
                         <div className="w-full h-full bg-muted/50 flex items-center justify-center">
                           <svg
-                            className="w-4 h-4 text-foreground"
-                            fill="none"
-                            stroke="currentColor"
+                            className="w-5 h-5 text-foreground"
+                            fill="currentColor"
                             viewBox="0 0 24 24"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-7 4h12a2 2 0 002-2V8a2 2 0 00-2-2H7a2 2 0 00-2 2v4a2 2 0 002 2z"
-                            />
+                            <path d="M8 5v14l11-7z" />
                           </svg>
                         </div>
                       ) : (
@@ -699,7 +672,7 @@ export default function ProjectPage({
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Category</span>
-                  <span>Full Stack Web Application</span>
+                  <span>{project.category}</span>
                 </div>
               </div>
             </div>
