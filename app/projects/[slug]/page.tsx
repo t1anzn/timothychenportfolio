@@ -59,7 +59,7 @@ const projects = [
     ],
     challenges:
       "Database schema design for efficient querying, dynamic movie grid rendering, robust search filtering and optimizing data fetching for performance.",
-    github: "https://github.com/timothychen01/cinemind",
+    github: "https://github.com/t1anzn/cinemind",
   },
   {
     title: "AI Study Companion App",
