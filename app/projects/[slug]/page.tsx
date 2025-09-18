@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { useEffect, useState, useRef, use } from "react";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const projects = [
   {
@@ -14,7 +15,6 @@ const projects = [
       "Flask",
       "SQLAlchemy",
       "Gemini API",
-      "TMDB API",
     ],
     status: "Completed",
     year: "2025",
@@ -103,7 +103,7 @@ const projects = [
   {
     title: "Smart IoT Watering System",
     tech: ["Arduino", "React Native", "MQTT", "Firebase"],
-    status: "GitHub",
+    status: "Completed",
     year: "2024",
     category: "IoT Hardware Project",
     images: [
@@ -166,49 +166,10 @@ export default function ProjectPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = use(params);
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const { theme, toggleTheme } = useTheme();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const imageContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // Check for saved theme preference or default to 'light'
-    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
-    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-      .matches
-      ? "dark"
-      : "light";
-    const initialTheme = savedTheme || systemTheme;
-
-    setTheme(initialTheme);
-    document.documentElement.classList.toggle("dark", initialTheme === "dark");
-
-    // Listen for theme changes from other pages/tabs
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === "theme" && e.newValue) {
-        const newTheme = e.newValue as "light" | "dark";
-        setTheme(newTheme);
-        document.documentElement.classList.toggle("dark", newTheme === "dark");
-      }
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
-  }, []);
-
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    document.documentElement.classList.toggle("dark", newTheme === "dark");
-
-    // Dispatch a custom event for same-page synchronization
-    window.dispatchEvent(
-      new CustomEvent("themeChanged", {
-        detail: { theme: newTheme },
-      })
-    );
-  };
 
   const project = projects.find((p) => p.slug === slug);
 
@@ -414,17 +375,33 @@ export default function ProjectPage({
               <span>{project.year}</span>
               <span className="w-1 h-1 rounded-full bg-muted-foreground"></span>
               <span
-                className={`px-2 py-0.5 rounded text-xs font-medium ${
-                  project.status === "Live"
-                    ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                    : project.status === "Completed"
-                    ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
-                    : project.status === "In Progress"
-                    ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-                    : project.status === "Award Winner"
-                    ? "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400"
-                    : "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400"
-                }`}
+                className={`px-2 py-0.5 rounded text-xs font-medium ${(() => {
+                  if (theme === "dark") {
+                    return project.status === "Live"
+                      ? "bg-[#166534] text-[#bbf7d0]"
+                      : project.status === "Completed"
+                      ? "bg-[#1e3a8a] text-[#93c5fd]"
+                      : project.status === "In Progress"
+                      ? "bg-[#b45309] text-[#fde68a]"
+                      : project.status === "GitHub"
+                      ? "bg-[#374151] text-[#d1d5db]"
+                      : project.status === "Award Winner"
+                      ? "bg-[#6d28d9] text-[#c4b5fd]"
+                      : "bg-[#374151] text-[#d1d5db]";
+                  } else {
+                    return project.status === "Live"
+                      ? "bg-[#16a34a] text-white"
+                      : project.status === "Completed"
+                      ? "bg-[#2563eb] text-white"
+                      : project.status === "In Progress"
+                      ? "bg-[#f59e42] text-[#222]"
+                      : project.status === "GitHub"
+                      ? "bg-[#6b7280] text-white"
+                      : project.status === "Award Winner"
+                      ? "bg-[#a21caf] text-white"
+                      : "bg-[#6b7280] text-white";
+                  }
+                })()}`}
               >
                 {project.status}
               </span>

@@ -2,59 +2,60 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { useTheme } from "./contexts/ThemeContext";
+
+const projects = [
+  {
+    title: "Full-Stack Movie Database",
+    tech: [
+      "React",
+      "Astro",
+      "TailwindCSS",
+      "Flask",
+      "SQLAlchemy",
+      "SQLite",
+      "Alembic",
+      "pandas",
+      "Gemini API",
+    ],
+    status: "Completed",
+    year: "2025",
+    image: "/cinemind3.png",
+    slug: "movie-database",
+  },
+  {
+    title: "AI Study Companion App",
+    tech: ["React Native", "TypeScript", "Firebase", "Gemini API"],
+    status: "In Progress",
+    year: "2025",
+    image: "/clarifymockup.png",
+    slug: "ai-study-companion",
+  },
+  {
+    title: "Smart IoT Watering System",
+    tech: ["Arduino", "React Native", "MQTT", "Firebase"],
+    status: "Completed",
+    year: "2024",
+    image: "/mobile-app-community-interface-mockup.jpg",
+    slug: "smart-watering-system",
+  },
+  {
+    title: "Portfolio Website",
+    tech: ["React", "Tailwind", "Framer Motion"],
+    status: "Live",
+    year: "2024",
+    image: "/minimalist-portfolio.png",
+    slug: "portfolio-website",
+  },
+];
 
 export default function Home() {
-  const [isDark, setIsDark] = useState(true);
+  const { theme, toggleTheme } = useTheme();
   const [activeSection, setActiveSection] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [codeText, setCodeText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
-
-  const projects = [
-    {
-      title: "Full-Stack Movie Database",
-      tech: [
-        "React",
-        "Astro",
-        "TailwindCSS",
-        "Flask",
-        "SQLAlchemy",
-        "SQLite",
-        "Alembic",
-        "pandas",
-        "Gemini API",
-      ],
-      status: "Completed",
-      year: "2025",
-      image: "/cinemind3.png",
-      slug: "movie-database",
-    },
-    {
-      title: "AI Study Companion App",
-      tech: ["React Native", "TypeScript", "Firebase", "Gemini API"],
-      status: "In Progress",
-      year: "2025",
-      image: "/clarifymockup.png",
-      slug: "ai-study-companion",
-    },
-    {
-      title: "Smart IoT Watering System",
-      tech: ["Arduino", "React Native", "MQTT", "Firebase"],
-      status: "Completed",
-      year: "2024",
-      image: "/mobile-app-community-interface-mockup.jpg",
-      slug: "smart-watering-system",
-    },
-    {
-      title: "Portfolio Website",
-      tech: ["React", "Tailwind", "Framer Motion"],
-      status: "Live",
-      year: "2024",
-      image: "/minimalist-portfolio.png",
-      slug: "portfolio-website",
-    },
-  ];
 
   const projectsPerPage = 4;
   const totalPages = Math.ceil(projects.length / projectsPerPage);
@@ -121,12 +122,6 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    // Ensure dark mode is applied immediately on mount
-    document.documentElement.classList.add("dark");
-    document.documentElement.classList.toggle("dark", isDark);
-  }, [isDark]);
-
-  useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -155,10 +150,6 @@ export default function Home() {
 
     return () => observer.disconnect();
   }, []);
-
-  const toggleTheme = () => {
-    setIsDark(!isDark);
-  };
 
   const nextPage = () => {
     setCurrentPage((prev) => {
@@ -218,7 +209,7 @@ export default function Home() {
           `,
         }}
       />
-      <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
+      <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
         <style jsx>{`
           @keyframes slideUp {
             from {
@@ -294,6 +285,58 @@ export default function Home() {
             transition: background-color 0.3s ease, color 0.5s ease,
               border-color 0.3s ease;
           }
+
+          .project-badge {
+            /* Default badge styles */
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+            transition: background 0.3s, color 0.3s;
+          }
+          .project-badge.live {
+            background: #16a34a; /* green-600 */
+            color: #fff;
+          }
+          .project-badge.completed {
+            background: #2563eb; /* blue-600 */
+            color: #fff;
+          }
+          .project-badge.in-progress {
+            background: #f59e42; /* amber-400 */
+            color: #222;
+          }
+          .project-badge.award {
+            background: #a21caf; /* purple-700 */
+            color: #fff;
+          }
+          .project-badge.other {
+            background: #6b7280; /* gray-500 */
+            color: #fff;
+          }
+          @media (prefers-color-scheme: dark) {
+            .project-badge.live {
+              background: #166534; /* green-800 */
+              color: #bbf7d0;
+            }
+            .project-badge.completed {
+              background: #1e3a8a; /* blue-800 */
+              color: #93c5fd;
+            }
+            .project-badge.in-progress {
+              background: #b45309; /* amber-700 */
+              color: #fde68a;
+            }
+            .project-badge.award {
+              background: #6d28d9; /* purple-800 */
+              color: #c4b5fd;
+            }
+            .project-badge.other {
+              background: #374151; /* gray-700 */
+              color: #d1d5db;
+            }
+          }
         `}</style>
 
         <nav className="fixed left-8 top-1/2 -translate-y-1/2 z-10 hidden lg:block">
@@ -331,7 +374,7 @@ export default function Home() {
                 {/* Sun Icon */}
                 <svg
                   className={`w-5 h-5 text-muted-foreground group-hover:text-foreground absolute transition-all duration-500 ${
-                    isDark
+                    theme === "dark"
                       ? "opacity-100 rotate-0 scale-100"
                       : "opacity-0 -rotate-90 scale-75"
                   }`}
@@ -347,7 +390,7 @@ export default function Home() {
                 {/* Moon Icon */}
                 <svg
                   className={`w-5 h-5 text-muted-foreground group-hover:text-foreground absolute transition-all duration-500 ${
-                    isDark
+                    theme === "dark"
                       ? "opacity-0 rotate-90 scale-75"
                       : "opacity-100 rotate-0 scale-100"
                   }`}
@@ -536,60 +579,76 @@ export default function Home() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-                {currentProjects.map((project, index) => (
-                  <Link
-                    key={index}
-                    href={`/projects/${project.slug}`}
-                    className="group text-left space-y-4 rounded-lg overflow-hidden hover:scale-[1.02] transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-muted-foreground/50"
-                    data-animate
-                  >
-                    <div className="relative overflow-hidden rounded-lg bg-background">
-                      <img
-                        src={project.image || "/placeholder.svg"}
-                        alt={project.title}
-                        className="w-full h-48 sm:h-56 object-cover group-hover:scale-105 transition-transform duration-700"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      <div
-                        className={`absolute top-4 right-4 px-2 py-1 text-xs rounded shadow-sm font-medium ${
-                          project.status === "Live"
-                            ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-400"
-                            : project.status === "Completed"
-                            ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-400"
-                            : project.status === "In Progress"
-                            ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-400"
-                            : project.status === "Award Winner"
-                            ? "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-400"
-                            : "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-400"
-                        }`}
-                      >
-                        {project.status}
-                      </div>
-                    </div>
-
-                    <div className="space-y-3 px-1">
-                      <div className="flex items-start justify-between">
-                        <h3 className="text-lg sm:text-xl font-light text-foreground group-hover:text-muted-foreground transition-colors duration-300">
-                          {project.title}
-                        </h3>
-                        <div className="text-sm text-muted-foreground font-mono">
-                          {project.year}
+                {currentProjects.map((project, index) => {
+                  let badgeClass = "project-badge ";
+                  if (theme === "dark") {
+                    badgeClass +=
+                      project.status === "Live"
+                        ? "bg-[#166534] text-[#bbf7d0]"
+                        : project.status === "Completed"
+                        ? "bg-[#1e3a8a] text-[#93c5fd]"
+                        : project.status === "In Progress"
+                        ? "bg-[#b45309] text-[#fde68a]"
+                        : project.status === "Award Winner"
+                        ? "bg-[#6d28d9] text-[#c4b5fd]"
+                        : "bg-[#374151] text-[#d1d5db]";
+                  } else {
+                    badgeClass +=
+                      project.status === "Live"
+                        ? "bg-[#16a34a] text-white"
+                        : project.status === "Completed"
+                        ? "bg-[#2563eb] text-white"
+                        : project.status === "In Progress"
+                        ? "bg-[#f59e42] text-[#222]"
+                        : project.status === "Award Winner"
+                        ? "bg-[#a21caf] text-white"
+                        : "bg-[#6b7280] text-white";
+                  }
+                  return (
+                    <Link
+                      key={index}
+                      href={`/projects/${project.slug}`}
+                      className="group text-left space-y-4 rounded-lg overflow-hidden hover:scale-[1.02] transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-muted-foreground/50"
+                      data-animate
+                    >
+                      <div className="relative overflow-hidden rounded-lg bg-background">
+                        <img
+                          src={project.image || "/placeholder.svg"}
+                          alt={project.title}
+                          className="w-full h-48 sm:h-56 object-cover group-hover:scale-105 transition-transform duration-700"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        <div
+                          className={`absolute top-4 right-4 px-2 py-1 rounded shadow-sm font-medium transition-colors duration-300 ${badgeClass}`}
+                        >
+                          {project.status}
                         </div>
                       </div>
 
-                      <div className="flex flex-wrap gap-2">
-                        {project.tech.map((tech) => (
-                          <span
-                            key={tech}
-                            className="px-2 py-0.5 text-xs text-muted-foreground bg-background border border-border/20 rounded shadow-sm"
-                          >
-                            {tech}
-                          </span>
-                        ))}
+                      <div className="space-y-3 px-1">
+                        <div className="flex items-start justify-between">
+                          <h3 className="text-lg sm:text-xl font-light text-foreground group-hover:text-muted-foreground transition-colors duration-300">
+                            {project.title}
+                          </h3>
+                          <div className="text-sm text-muted-foreground font-mono">
+                            {project.year}
+                          </div>
+                        </div>
+
+                        <div className="flex flex-wrap gap-2">
+                          {project.tech.map((tech) => (
+                            <span
+                              key={tech}
+                              className="px-2 py-0.5 text-xs text-muted-foreground bg-background border border-border/20 rounded shadow-sm"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                ))}
+                    </Link>
+                  );
+                })}
               </div>
 
               {totalPages > 1 && (
@@ -775,8 +834,8 @@ export default function Home() {
                   Get In Touch
                 </h2>
                 <p className="text-muted-foreground max-w-lg mx-auto text-balance">
-                  Have a project in mind or want to collaborate? I'd love to
-                  hear from you.
+                  Having a project in mind or want to collaborate? I&apos;d love
+                  to hear from you.
                 </p>
               </div>
 
