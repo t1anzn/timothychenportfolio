@@ -305,8 +305,11 @@ export default function Home() {
 
           /* Global theme transition */
           * {
-            transition: background-color 0.3s ease, color 0.5s ease,
-              border-color 0.3s ease;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+          }
+          .text-primary,
+          .text-foreground {
+            transition: color 0.1s linear;
           }
 
           .project-badge {
@@ -969,7 +972,7 @@ export default function Home() {
 
               <div className="flex items-center gap-4">
                 <a
-                  href="https://linkedin.com/in/timothy-chen-dev"
+                  href="https://linkedin.com/in/timothychenldn"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group p-3 rounded-lg bg-background border border-border hover:border-muted-foreground/50 transition-all duration-300 shadow-sm"
