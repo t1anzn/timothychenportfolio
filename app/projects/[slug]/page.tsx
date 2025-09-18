@@ -152,7 +152,7 @@ const projects = [
   },
   {
     title: "Portfolio Website",
-    tech: ["React", "Tailwind", "Framer Motion"],
+    tech: ["React", "Tailwind", "Next.js", "TypeScript", "v0.dev"],
     status: "Live",
     year: "2024",
     category: "Portfolio Website",
@@ -186,8 +186,8 @@ const projects = [
     ],
     challenges:
       "Visual design consistency, responsive layout across devices and screen sizes.",
-    github: "https://github.com/timothychen01/portfolio",
-    demo: "https://timothychen.dev",
+    github: "https://github.com/t1anzn/timothychenportfolio",
+    demo: "https://timothychen.vercel.app",
   },
 ];
 
