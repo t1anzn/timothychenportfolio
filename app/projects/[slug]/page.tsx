@@ -154,7 +154,7 @@ const projects = [
     title: "Portfolio Website",
     tech: ["React", "Tailwind", "Next.js", "TypeScript", "v0.dev"],
     status: "Live",
-    year: "2024",
+    year: "2025",
     category: "Portfolio Website",
     images: [
       {

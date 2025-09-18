@@ -41,9 +41,9 @@ const projects = [
   },
   {
     title: "Portfolio Website",
-    tech: ["React", "Tailwind", "Framer Motion"],
+    tech: ["React", "Tailwind", "Next.js", "v0.dev", "TypeScript"],
     status: "Live",
-    year: "2024",
+    year: "2025",
     image: "/webportfoliomockup1.png",
     slug: "portfolio-website",
   },
@@ -433,7 +433,7 @@ export default function Home() {
             ref={(el) => {
               sectionsRef.current[0] = el;
             }}
-            className="min-h-screen flex items-center opacity-0"
+            className="min-h-screen flex items-center opacity-0 pt-24 sm:pt-10"
           >
             <div className="w-full">
               <div className="grid lg:grid-cols-2 gap-16 items-center">
