@@ -474,7 +474,7 @@ export default function Home() {
                         Full Stack Developer & CS Student
                       </div>
                       <h1
-                        className="text-5xl sm:text-6xl lg:text-7xl font-normal tracking-widest"
+                        className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight"
                         data-animate
                       >
                         Timothy
@@ -545,6 +545,15 @@ export default function Home() {
                       </div>
 
                       <div className="flex items-center gap-3">
+                        <a
+                          href="/TimothyChenCV.pdf"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm text-muted-foreground hover:text-primary transition-colors duration-300"
+                        >
+                          View CV
+                        </a>
+
                         <a
                           href="https://github.com/t1anzn"
                           target="_blank"
