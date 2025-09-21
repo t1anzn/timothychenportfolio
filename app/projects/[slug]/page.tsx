@@ -118,12 +118,12 @@ const projects = [
         caption: "Circuit diagram of the Smart IoT Watering System",
       },
       {
-        src: "/labelledwatering.png",
+        src: "/labelledwatering.PNG",
         alt: "Labelled prototype of the Smart IoT Watering System circuit",
         caption: "Labelled prototype of the Smart IoT Watering System circuit",
       },
       {
-        src: "/ultrasoniclabelled.png",
+        src: "/ultrasoniclabelled.PNG",
         alt: "Labelled ultrasonic sensor system",
         caption: "Labelled ultrasonic sensor system",
       },
