@@ -70,6 +70,18 @@ export default function Home() {
     (currentPage + 1) * projectsPerPage
   );
 
+  // Main technologies for dynamic display
+  const mainTechnologies = [
+    "React",
+    "JavaScript",
+    "Python",
+    "Next.js",
+    "Firebase",
+    "Tailwind",
+    "AI APIs",
+    "HTML/CSS",
+  ];
+
   useEffect(() => {
     const codeLines = [
       "const developer = {",
@@ -517,6 +529,23 @@ export default function Home() {
                       </button>
                     </div>
 
+                    {/* Tech Stack Grid */}
+                    <div className="space-y-3" data-animate>
+                      <div className="text-sm text-muted-foreground font-mono tracking-wider uppercase">
+                        Tech Stack
+                      </div>
+                      <div className="grid grid-cols-4 sm:grid-cols-6 gap-2 max-w-lg">
+                        {mainTechnologies.map((tech, index) => (
+                          <div
+                            key={index}
+                            className="group flex items-center justify-center px-3 py-2 text-xs bg-background border border-border/30 rounded-lg shadow-sm hover:border-primary/30 hover:text-foreground transition-all duration-200 cursor-default"
+                          >
+                            {tech}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
                     <div
                       className="flex flex-col sm:flex-row sm:items-center gap-4 pt-4 border-t border-border/50"
                       data-animate
@@ -549,7 +578,7 @@ export default function Home() {
                           href="/TimothyChenCV.pdf"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-sm text-muted-foreground hover:text-primary transition-colors duration-300"
+                          className="text-sm text-muted-foreground border border-border rounded-lg p-2 hover:text-primary transition-colors duration-300"
                         >
                           View CV
                         </a>
