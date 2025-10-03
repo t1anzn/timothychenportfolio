@@ -62,6 +62,52 @@ const projects = [
     github: "https://github.com/t1anzn/cinemind",
   },
   {
+    title: "Machine Learning Topic Classifier",
+    tech: [
+      "Python",
+      "Flask",
+      "BERT",
+      "scikit-learn",
+      "Google Colab",
+      "pandas",
+      "NumPy",
+      "Matplotlib",
+    ],
+    status: "Completed",
+    year: "2025",
+    category: "Machine Learning Project",
+    images: [
+      {
+        src: "/topic-classifier-preview.png",
+        alt: "AI-Powered Topic Classifier web interface",
+        caption:
+          "Frontend interface for text input and topic classification results",
+      },
+      {
+        type: "video",
+        src: "/topic-classifier-demo.mp4",
+        alt: "Topic Classifier demo video",
+        caption:
+          "Demo showcasing the topic classification process and result output",
+      },
+    ],
+    slug: "topic-classifier",
+    description:
+      "A machine learning project that classifies news articles into predefined topics using a fine-tuned BERT deep learning model.",
+    features: [
+      "Automatic news article classification",
+      "Fine-tuned BERT model with 2,000+ labeled samples",
+      "Optimized training for best validation performance",
+      "Comparison with TF-IDF + Naive Bayes baseline",
+      "Flask backend for model inference",
+      "User-friendly web interface",
+      "Gdown for large model file handling",
+    ],
+    challenges:
+      "Fine-tuning BERT for optimal performance, TF-IDF and Naive Bayes baseline implementation.",
+    github: "https://github.com/t1anzn/topic-classifier",
+  },
+  {
     title: "AI Study Companion App",
     tech: ["React Native", "TypeScript", "Firebase", "Gemini API"],
     status: "In Progress",

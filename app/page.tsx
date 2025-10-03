@@ -40,6 +40,23 @@ const projects = [
     slug: "smart-watering-system",
   },
   {
+    title: "Machine Learning Topic Classifier",
+    tech: [
+      "Python",
+      "Flask",
+      "BERT",
+      "scikit-learn",
+      "Google Colab",
+      "pandas",
+      "NumPy",
+      "Matplotlib",
+    ],
+    status: "Completed",
+    year: "2025",
+    image: "/topic-classifier-preview.png",
+    slug: "topic-classifier",
+  },
+  {
     title: "Portfolio Website",
     tech: ["React", "Tailwind", "Next.js", "v0.dev", "TypeScript"],
     status: "Live",
