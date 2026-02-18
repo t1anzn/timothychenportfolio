@@ -64,6 +64,20 @@ const projects = [
     image: "/webportfoliomockup1.png",
     slug: "portfolio-website",
   },
+  {
+    title: "Mandarin Powerpoint Generator",
+    tech: [
+      "Python",
+      "Tkinter",
+      "python-pptx",
+      "deep-translator (Google Translate)",
+    ],
+    status: "Completed",
+    year: "2025",
+    image: "/mandarin-ppt-gui.png",
+    slug: "mandarin-ppt-generator",
+    github: "https://github.com/t1anzn/Mandarin-PPT-Generator",
+  },
 ];
 
 export default function Home() {
@@ -95,7 +109,7 @@ export default function Home() {
     "Next.js",
     "Firebase",
     "Tailwind",
-    "AI APIs",
+    "AI",
     "HTML/CSS",
   ];
 
