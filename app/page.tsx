@@ -550,7 +550,9 @@ export default function Home() {
                       )}
                     </div>
                     <div className="muted projects-summary">{p.summary}</div>
-                    <div className="muted projects-meta">{p.year} — {p.status}</div>
+                    <div className="muted projects-meta">
+                      {p.year} — {p.status}
+                    </div>
                   </div>
                 </div>
               </div>
