@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Github, Linkedin, Twitter } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const projects = [
   {
@@ -103,6 +103,13 @@ const sections = [
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<string>(sections[0]?.id);
+  const mobileMenuRef = useRef<HTMLDetailsElement | null>(null);
+
+  const selectTab = (id: string) => {
+    setActiveTab(id);
+    window.history.replaceState(null, "", `#${id}`);
+    mobileMenuRef.current?.removeAttribute("open");
+  };
 
   useEffect(() => {
     const syncTabFromHash = () => {
@@ -119,6 +126,79 @@ export default function Home() {
 
   return (
     <div className="cv-shell">
+      <header className="mobile-nav no-print" aria-label="Mobile menu">
+        <div className="mobile-nav-row">
+          <details className="mobile-menu" ref={mobileMenuRef}>
+            <summary className="mobile-menu-summary" aria-label="Open menu">
+              <span className="hamburger" aria-hidden="true">
+                <span className="hamburger-line" />
+                <span className="hamburger-line" />
+                <span className="hamburger-line" />
+              </span>
+            </summary>
+            <div className="mobile-menu-panel">
+              <nav className="mobile-menu-tabs" aria-label="Sections">
+                {sections.map((t) => (
+                  <button
+                    key={t.id}
+                    type="button"
+                    className={activeTab === t.id ? "tab tab-active" : "tab"}
+                    aria-pressed={activeTab === t.id}
+                    onClick={() => selectTab(t.id)}
+                  >
+                    {t.label}
+                  </button>
+                ))}
+              </nav>
+
+              <div className="mobile-menu-footer muted" aria-label="Contacts">
+                <a href="mailto:timothy.chen188@gmail.com">
+                  timothy.chen188@gmail.com
+                </a>
+                <div>+44 7863 472 097</div>
+                <div className="contact-icons" aria-label="Social links">
+                  <a
+                    className="contact-icon-link"
+                    href="https://www.linkedin.com/in/timothychenldn/"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="LinkedIn"
+                    title="LinkedIn"
+                  >
+                    <Linkedin size={18} aria-hidden="true" />
+                  </a>
+                  <a
+                    className="contact-icon-link"
+                    href="https://github.com/t1anzn"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="GitHub"
+                    title="GitHub"
+                  >
+                    <Github size={18} aria-hidden="true" />
+                  </a>
+                  <a
+                    className="contact-icon-link"
+                    href="https://x.com/timtianye"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="Twitter / X"
+                    title="Twitter / X"
+                  >
+                    <Twitter size={18} aria-hidden="true" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <div className="mobile-nav-title">
+            <div className="cv-name">Timothy Chen</div>
+            <div className="muted">London, UK</div>
+          </div>
+        </div>
+      </header>
+
       <aside className="cv-sidebar no-print" aria-label="Sections">
         <div className="cv-sidebar-header">
           <div className="cv-name">Timothy Chen</div>
@@ -132,10 +212,7 @@ export default function Home() {
               type="button"
               className={activeTab === t.id ? "tab tab-active" : "tab"}
               aria-pressed={activeTab === t.id}
-              onClick={() => {
-                setActiveTab(t.id);
-                window.history.replaceState(null, "", `#${t.id}`);
-              }}
+              onClick={() => selectTab(t.id)}
             >
               {t.label}
             </button>

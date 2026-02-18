@@ -12,7 +12,6 @@ const serif = PT_Serif({
 
 export const metadata: Metadata = {
   title: "Timothy Chen - Developer Portfolio",
-  description: "A minimal CV-style developer portfolio.",
   generator: "v0.app",
 };
 

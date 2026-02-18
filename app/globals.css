@@ -87,6 +87,12 @@
     text-rendering: optimizeLegibility;
   }
 
+  @media (max-width: 640px) {
+    body {
+      font-size: 16px;
+    }
+  }
+
   a {
     color: inherit;
     text-decoration: underline;
@@ -111,6 +117,17 @@
     margin-inline: auto;
   }
 
+  @media (max-width: 900px) {
+    .cv-shell {
+      flex-direction: column;
+      gap: 0;
+    }
+  }
+
+  .mobile-nav {
+    display: none;
+  }
+
   .cv-sidebar {
     width: 22ch;
     padding: 2.5rem 1.25rem;
@@ -119,6 +136,104 @@
     height: 100vh;
     overflow: auto;
     border-right: 1px solid var(--border);
+  }
+
+  @media (max-width: 900px) {
+    .cv-sidebar {
+      display: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .mobile-nav {
+      display: block;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mobile-nav-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .mobile-nav-title {
+      min-width: 0;
+      text-align: right;
+    }
+
+    .mobile-menu {
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .mobile-menu-summary {
+      cursor: pointer;
+      border: 1px solid var(--border);
+      padding: 0.5rem 0.55rem;
+      font-size: 0.95rem;
+      user-select: none;
+      list-style: none;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mobile-menu-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .mobile-menu[open] .mobile-menu-summary {
+      font-weight: 700;
+    }
+
+    .mobile-menu-panel {
+      position: absolute;
+      left: 0;
+      top: calc(100% + 0.5rem);
+      width: min(26rem, 92vw);
+      border: 1px solid var(--border);
+      background: var(--background);
+      padding: 0.75rem;
+      z-index: 20;
+    }
+
+    .hamburger {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .hamburger-line {
+      display: block;
+      width: 1.15rem;
+      height: 2px;
+      background: currentColor;
+    }
+
+    .mobile-menu-tabs {
+      display: grid;
+      gap: 0.25rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .mobile-menu-tabs .tab {
+      width: 100%;
+      padding: 0.5rem 0.45rem;
+    }
+
+    .mobile-menu-footer {
+      display: grid;
+      gap: 0.35rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .mobile-nav {
+      padding: 1rem 1rem;
+    }
   }
 
   .cv-sidebar-header {
@@ -164,6 +279,15 @@
     flex-direction: column;
     gap: 0.25rem;
     margin-bottom: 1rem;
+  }
+
+  @media (max-width: 900px) {
+    .cv-tabs {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 0.35rem 0.6rem;
+      margin-bottom: 0.75rem;
+    }
   }
 
   .tab {
@@ -271,6 +395,27 @@
     padding: 2.75rem 1.5rem;
   }
 
+  @media (max-width: 900px) {
+    .cv {
+      max-width: none;
+      padding: 1.5rem 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .cv-sidebar {
+      padding: 1rem 1rem;
+    }
+
+    .cv {
+      padding: 1.25rem 1rem;
+    }
+
+    .cv-portrait-about .cv-portrait-img {
+      width: 260px;
+    }
+  }
+
   .cv-standalone {
     margin-inline: auto;
   }
@@ -298,7 +443,7 @@
   }
 
   .cv h1 {
-    font-size: 2.35rem;
+    font-size: clamp(1.85rem, 5.2vw, 2.35rem);
     font-weight: 700;
     letter-spacing: -0.01em;
     line-height: 1.15;
@@ -306,7 +451,7 @@
   }
 
   .cv h2 {
-    font-size: 1.3rem;
+    font-size: clamp(1.15rem, 3.6vw, 1.3rem);
     font-weight: 700;
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
@@ -451,6 +596,24 @@
     padding-left: 1.25rem;
   }
 
+  @media (max-width: 480px) {
+    .timeline {
+      padding-left: 1.05rem;
+    }
+
+    .timeline::before {
+      left: 0.25rem;
+    }
+
+    .timeline-item {
+      padding-left: 0.65rem;
+    }
+
+    .timeline-item::before {
+      left: -0.92rem;
+    }
+  }
+
   .timeline::before {
     content: "";
     position: absolute;
@@ -537,6 +700,13 @@
     min-width: 0;
   }
 
+  @media (max-width: 640px) {
+    .projects-left {
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+  }
+
   .projects-thumb {
     flex: 0 0 auto;
   }
@@ -550,6 +720,13 @@
   }
 
   @media (max-width: 640px) {
+    .projects-thumb-img {
+      width: 140px;
+      height: 140px;
+    }
+  }
+
+  @media (max-width: 480px) {
     .projects-thumb-img {
       width: 120px;
       height: 120px;
