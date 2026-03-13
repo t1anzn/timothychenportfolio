@@ -32,6 +32,30 @@ type Project = {
 
 const projects: Project[] = [
   {
+    title: "TCP Key-Value Server",
+    tech: ["C++", "TCP/IP", "Linux"],
+    status: "Work in Progress",
+    year: "2026",
+    category: "Networking / Systems Programming",
+    images: [
+      {
+        src: "/tcp.png",
+        alt: "TCP Key-Value Server thumbnail",
+        caption: "Project logo/thumbnail",
+      },
+    ],
+    slug: "tcp-key-value-server",
+    description:
+      "A C++ TCP key-value server with basic client-server communication. Planned features include more commands, data persistence, and protocol improvements.",
+    features: [
+      "Basic client-server communication over TCP",
+      "Planned: more commands, data persistence, protocol improvements",
+    ],
+    challenges:
+      "Implementing robust socket handling, planning for extensible protocol design, and ensuring cross-platform compatibility.",
+    github: "https://github.com/t1anzn/redisclone",
+  },
+  {
     title: "Full-Stack Movie Database",
     tech: [
       "React",

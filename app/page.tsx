@@ -26,6 +26,16 @@ const projects = [
     skills: ["iot", "data", "ai"],
   },
   {
+    title: "TCP Key-Value Server",
+    year: "2026",
+    status: "Work in Progress",
+    thumb: "/tcp.png",
+    summary:
+      "C++ TCP key-value server with basic client-server communication. Planned: more commands, data persistence, protocol improvements.",
+    skills: ["c++", "tcp/ip", "linux"],
+    slug: "tcp-key-value-server",
+  },
+  {
     title: "AI Study Companion App",
     year: "2025",
     status: "In Progress",
@@ -150,7 +160,6 @@ export default function Home() {
                   </button>
                 ))}
               </nav>
-
               <div className="mobile-menu-footer muted" aria-label="Contacts">
                 <a href="mailto:timothy.chen188@gmail.com">
                   timothy.chen188@gmail.com
