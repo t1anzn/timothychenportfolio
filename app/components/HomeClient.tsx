@@ -5,6 +5,10 @@ import Link from "next/link";
 import { Github, Linkedin, Twitter } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
+import { urlFor } from "@/sanity/lib/image";
+import type { NowData, ProjectListItem, SiteSettings } from "@/sanity/lib/types";
+
+const PLACEHOLDER_IMG = "/placeholder.svg";
 
 const sections = [
   { id: "about", label: "about" },
@@ -13,28 +17,26 @@ const sections = [
   { id: "contacts", label: "contacts" },
 ];
 
-interface NowData {
-  date: string;
-  items: string[];
+function thumbUrl(thumbnail: ProjectListItem["thumbnail"], size = 150) {
+  return thumbnail
+    ? urlFor(thumbnail).width(size).height(size).fit("crop").url()
+    : PLACEHOLDER_IMG;
 }
 
-interface Project {
-  title: string;
-  year: string;
-  status: string;
-  slug?: string;
-  hidden: boolean;
-  thumb: string;
-  summary: string;
-  skills: string[];
+function portraitUrl(portrait: SiteSettings["portrait"], size: number) {
+  return portrait
+    ? urlFor(portrait).width(size).height(size).fit("crop").url()
+    : PLACEHOLDER_IMG;
 }
 
 export default function HomeClient({
   nowData,
   projects,
+  siteSettings,
 }: {
   nowData: NowData;
-  projects: Project[];
+  projects: ProjectListItem[];
+  siteSettings: SiteSettings;
 }) {
   const [activeTab, setActiveTab] = useState<string>(sections[0]?.id);
   const mobileMenuRef = useRef<HTMLDetailsElement | null>(null);
@@ -57,6 +59,49 @@ export default function HomeClient({
     window.addEventListener("hashchange", syncTabFromHash);
     return () => window.removeEventListener("hashchange", syncTabFromHash);
   }, []);
+
+  const { socialLinks } = siteSettings;
+
+  const contactIcons = (
+    <div className="contact-icons" aria-label="Social links">
+      {socialLinks?.linkedin ? (
+        <a
+          className="contact-icon-link"
+          href={socialLinks.linkedin}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="LinkedIn"
+          title="LinkedIn"
+        >
+          <Linkedin size={18} aria-hidden="true" />
+        </a>
+      ) : null}
+      {socialLinks?.github ? (
+        <a
+          className="contact-icon-link"
+          href={socialLinks.github}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="GitHub"
+          title="GitHub"
+        >
+          <Github size={18} aria-hidden="true" />
+        </a>
+      ) : null}
+      {socialLinks?.twitter ? (
+        <a
+          className="contact-icon-link"
+          href={socialLinks.twitter}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Twitter / X"
+          title="Twitter / X"
+        >
+          <Twitter size={18} aria-hidden="true" />
+        </a>
+      ) : null}
+    </div>
+  );
 
   return (
     <div className="cv-shell">
@@ -85,57 +130,24 @@ export default function HomeClient({
                 ))}
               </nav>
               <div className="mobile-menu-footer muted" aria-label="Contacts">
-                <a href="mailto:timothy.chen188@gmail.com">
-                  timothy.chen188@gmail.com
-                </a>
-                <div>+44 7863 472 097</div>
-                <div className="contact-icons" aria-label="Social links">
-                  <a
-                    className="contact-icon-link"
-                    href="https://www.linkedin.com/in/timothychenldn/"
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label="LinkedIn"
-                    title="LinkedIn"
-                  >
-                    <Linkedin size={18} aria-hidden="true" />
-                  </a>
-                  <a
-                    className="contact-icon-link"
-                    href="https://github.com/t1anzn"
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label="GitHub"
-                    title="GitHub"
-                  >
-                    <Github size={18} aria-hidden="true" />
-                  </a>
-                  <a
-                    className="contact-icon-link"
-                    href="https://x.com/timtianye"
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label="Twitter / X"
-                    title="Twitter / X"
-                  >
-                    <Twitter size={18} aria-hidden="true" />
-                  </a>
-                </div>
+                <a href={`mailto:${siteSettings.email}`}>{siteSettings.email}</a>
+                <div>{siteSettings.phone}</div>
+                {contactIcons}
               </div>
             </div>
           </details>
 
           <div className="mobile-nav-title">
-            <div className="cv-name">Timothy Chen</div>
-            <div className="muted">London, UK</div>
+            <div className="cv-name">{siteSettings.name}</div>
+            <div className="muted">{siteSettings.location}</div>
           </div>
         </div>
       </header>
 
       <aside className="cv-sidebar no-print" aria-label="Sections">
         <div className="cv-sidebar-header">
-          <div className="cv-name">Timothy Chen</div>
-          <div className="muted">London, UK</div>
+          <div className="cv-name">{siteSettings.name}</div>
+          <div className="muted">{siteSettings.location}</div>
         </div>
 
         <nav className="cv-tabs" aria-label="Tabs">
@@ -153,42 +165,9 @@ export default function HomeClient({
         </nav>
 
         <div className="cv-sidebar-footer muted">
-          <a href="mailto:timothy.chen188@gmail.com">
-            timothy.chen188@gmail.com
-          </a>
-          <div>+44 7863 472 097</div>
-          <div className="contact-icons" aria-label="Social links">
-            <a
-              className="contact-icon-link"
-              href="https://www.linkedin.com/in/timothychenldn/"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="LinkedIn"
-              title="LinkedIn"
-            >
-              <Linkedin size={18} aria-hidden="true" />
-            </a>
-            <a
-              className="contact-icon-link"
-              href="https://github.com/t1anzn"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="GitHub"
-              title="GitHub"
-            >
-              <Github size={18} aria-hidden="true" />
-            </a>
-            <a
-              className="contact-icon-link"
-              href="https://x.com/timtianye"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Twitter / X"
-              title="Twitter / X"
-            >
-              <Twitter size={18} aria-hidden="true" />
-            </a>
-          </div>
+          <a href={`mailto:${siteSettings.email}`}>{siteSettings.email}</a>
+          <div>{siteSettings.phone}</div>
+          {contactIcons}
         </div>
       </aside>
 
@@ -196,20 +175,22 @@ export default function HomeClient({
         <header className="print-only">
           <div className="cv-portrait-print" aria-hidden="true">
             <Image
-              src="/IMG_2832.jpg"
+              src={portraitUrl(siteSettings.portrait, 160)}
               alt="Portrait"
               width={160}
               height={160}
               className="cv-portrait-img"
             />
           </div>
-          <h1>Timothy Chen</h1>
+          <h1>{siteSettings.name}</h1>
           <div className="meta muted">
             <span>Software Engineering / Computer Science Student</span>
-            <span>London, UK</span>
-            <span>+44 7863 472 097</span>
-            <span>timothy.chen188@gmail.com</span>
-            <span>github.com/t1anzn</span>
+            <span>{siteSettings.location}</span>
+            <span>{siteSettings.phone}</span>
+            <span>{siteSettings.email}</span>
+            {socialLinks?.github ? (
+              <span>{socialLinks.github.replace(/^https?:\/\//, "")}</span>
+            ) : null}
           </div>
           <hr />
         </header>
@@ -220,7 +201,7 @@ export default function HomeClient({
           <div className="about-hero">
             <div className="cv-portrait-about" aria-hidden="true">
               <Image
-                src="/IMG_2832.jpg"
+                src={portraitUrl(siteSettings.portrait, 320)}
                 alt="Portrait"
                 width={320}
                 height={320}
@@ -230,18 +211,12 @@ export default function HomeClient({
             </div>
 
             <div className="about-hero-text">
-              <h1>Hi, I&apos;m Timothy Chen.</h1>
-              <p className="muted">
-                computer science student / ai engineer in london.
-              </p>
+              <h1>Hi, I&apos;m {siteSettings.name}.</h1>
+              <p className="muted">{siteSettings.heroTagline}</p>
 
               <section>
                 <h2>summary</h2>
-                <p>
-                  computer science student with experience building complete
-                  applications, integrating AI solutions and solving system
-                  design challenges.
-                </p>
+                <p>{siteSettings.summary}</p>
               </section>
             </div>
           </div>
@@ -249,48 +224,26 @@ export default function HomeClient({
           <section>
             <h2>skills</h2>
             <div className="skills-groups">
-              <div className="skill-group">
-                <div className="skill-group-title">frontend</div>
-                <p className="muted">
-                  React, Next.js, TypeScript, Tailwind CSS
-                </p>
-              </div>
-              <div className="skill-group">
-                <div className="skill-group-title">backend</div>
-                <p className="muted">Python, Flask, SQLAlchemy</p>
-              </div>
-              <div className="skill-group">
-                <div className="skill-group-title">mobile</div>
-                <p className="muted">React Native</p>
-              </div>
-              <div className="skill-group">
-                <div className="skill-group-title">cloud / devops</div>
-                <p className="muted">AWS, Docker, Firebase</p>
-              </div>
-              <div className="skill-group">
-                <div className="skill-group-title">data</div>
-                <p className="muted">SQL</p>
-              </div>
+              {siteSettings.skillGroups?.map((group) => (
+                <div className="skill-group" key={group.groupName}>
+                  <div className="skill-group-title">{group.groupName}</div>
+                  <p className="muted">{group.skills?.join(", ")}</p>
+                </div>
+              ))}
             </div>
           </section>
 
           <section>
             <h2>education</h2>
             <div className="edu-list">
-              <div className="edu-item">
-                <div className="row">
-                  <strong>BSc (Hons) Computer Science — UAL</strong>
-                  <span className="muted right">Sep 2024 – 2027</span>
+              {siteSettings.education?.map((item) => (
+                <div className="edu-item" key={item.institution}>
+                  <div className="row">
+                    <strong>{item.institution}</strong>
+                    <span className="muted right">{item.dateRange}</span>
+                  </div>
                 </div>
-              </div>
-              <div className="edu-item">
-                <div className="row">
-                  <strong>
-                    CertHE Creative Computing — Goldsmiths, University of London
-                  </strong>
-                  <span className="muted right">Sep 2021 – Jun 2023</span>
-                </div>
-              </div>
+              ))}
             </div>
           </section>
 
@@ -316,85 +269,19 @@ export default function HomeClient({
           <h2>Work Experience</h2>
 
           <div className="timeline" aria-label="Work experience timeline">
-            <div className="timeline-item">
-              <p className="timeline-title">
-                <strong>Founding Growth Intern — Selah</strong>
-                <span className="muted"> — May 2026 – Present</span>
-              </p>
-              <ul>
-                <li>
-                  First hire at an early-stage email-first Bible reading startup,
-                  owning growth across content, partnerships, and community.
-                </li>
-                <li>
-                  Running growth experiments across social media and outreach
-                  channels, and building AI tooling to automate repeatable tasks.
-                </li>
-              </ul>
-            </div>
-
-            <div className="timeline-item">
-              <p className="timeline-title">
-                <strong>Barista — Costa Coffee</strong>
-                <span className="muted"> — Oct 2025 – Present</span>
-              </p>
-              <ul>
-                <li>
-                  Delivered customer-first service while preparing coffee and
-                  beverages to standard, maintaining speed and accuracy during
-                  busy periods.
-                </li>
-                <li>
-                  Maintained cleanliness across the store for dine-in service,
-                  including tables and front-of-house.
-                </li>
-                <li>
-                  Followed SOPs for drink prep, food handling, and
-                  closing/opening procedures.
-                </li>
-                <li>
-                  Completed ongoing online Costa learning and training modules
-                  to stay aligned with store standards.
-                </li>
-              </ul>
-            </div>
-
-            <div className="timeline-item">
-              <p className="timeline-title">
-                <strong>Barista — Chatime</strong>
-                <span className="muted"> — Jul 2024 – Jan 2025</span>
-              </p>
-              <ul>
-                <li>
-                  Prepared drinks to standard while maintaining speed and
-                  accuracy during busy periods.
-                </li>
-                <li>
-                  Managed stock levels and ensured ingredient availability.
-                </li>
-                <li>Delivered friendly, efficient customer service.</li>
-              </ul>
-            </div>
-
-            <div className="timeline-item">
-              <p className="timeline-title">
-                <strong>3D Visual Artist — Self-Employed</strong>
-                <span className="muted"> — Jan 2016 – 2024</span>
-              </p>
-              <ul>
-                <li>
-                  Produced 3D visual assets using Cinema4D and Adobe Photoshop.
-                </li>
-                <li>
-                  Optimised rendering times through post-processing and workflow
-                  improvements.
-                </li>
-                <li>
-                  Managed end-to-end project delivery: requirements, feedback
-                  cycles, and deadlines.
-                </li>
-              </ul>
-            </div>
+            {siteSettings.experience?.map((job) => (
+              <div className="timeline-item" key={`${job.role}-${job.dateRange}`}>
+                <p className="timeline-title">
+                  <strong>{job.role}</strong>
+                  <span className="muted"> — {job.dateRange}</span>
+                </p>
+                <ul>
+                  {job.bullets?.map((bullet, i) => (
+                    <li key={i}>{bullet}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -404,37 +291,36 @@ export default function HomeClient({
           <h1 className="visually-hidden">Projects</h1>
           <h2>Selected Projects</h2>
           <div className="projects-list">
-            {projects.map((p) => (
-              <div
-                className="projects-item"
-                key={p.slug ?? `${p.title}-${p.year}`}
-              >
-                <div className="projects-left">
-                  <div className="projects-thumb">
-                    <Image
-                      src={p.thumb}
-                      alt={`${p.title} thumbnail`}
-                      width={150}
-                      height={150}
-                      className="projects-thumb-img"
-                    />
-                  </div>
-                  <div className="projects-text">
-                    <div className="projects-title">
-                      {p.slug && !p.hidden ? (
-                        <Link href={`/projects/${p.slug}`}>{p.title}</Link>
-                      ) : (
-                        <span className="project-title-plain">{p.title}</span>
-                      )}
+            {projects
+              .filter((p) => !p.hidden)
+              .map((p) => (
+                <div className="projects-item" key={p.slug}>
+                  <div className="projects-left">
+                    <div className="projects-thumb">
+                      <Image
+                        src={thumbUrl(p.thumbnail)}
+                        alt={`${p.title} thumbnail`}
+                        width={150}
+                        height={150}
+                        className="projects-thumb-img"
+                      />
                     </div>
-                    <div className="muted projects-summary">{p.summary}</div>
-                    <div className="muted projects-meta">
-                      {p.year} — {p.status}
+                    <div className="projects-text">
+                      <div className="projects-title">
+                        {p.slug ? (
+                          <Link href={`/projects/${p.slug}`}>{p.title}</Link>
+                        ) : (
+                          <span className="project-title-plain">{p.title}</span>
+                        )}
+                      </div>
+                      <div className="muted projects-summary">{p.summary}</div>
+                      <div className="muted projects-meta">
+                        {p.year} — {p.status}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </section>
 
@@ -444,54 +330,45 @@ export default function HomeClient({
           <h1 className="visually-hidden">Contacts</h1>
           <h2>Contact</h2>
           <p>
-            Email:{" "}
-            <a href="mailto:timothy.chen188@gmail.com">
-              timothy.chen188@gmail.com
-            </a>
+            Email: <a href={`mailto:${siteSettings.email}`}>{siteSettings.email}</a>
             <br />
-            Phone: +44 7863 472 097
+            Phone: {siteSettings.phone}
             <br />
-            Location: London, UK
+            Location: {siteSettings.location}
           </p>
 
           <h2>Links</h2>
           <ul>
-            <li>
-              <a
-                href="https://www.linkedin.com/in/timothychenldn/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span className="inline-icon" aria-hidden="true">
-                  <Linkedin size={16} />
-                </span>
-                LinkedIn
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://github.com/t1anzn"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span className="inline-icon" aria-hidden="true">
-                  <Github size={16} />
-                </span>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://x.com/timtianye"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span className="inline-icon" aria-hidden="true">
-                  <Twitter size={16} />
-                </span>
-                X
-              </a>
-            </li>
+            {socialLinks?.linkedin ? (
+              <li>
+                <a href={socialLinks.linkedin} target="_blank" rel="noreferrer">
+                  <span className="inline-icon" aria-hidden="true">
+                    <Linkedin size={16} />
+                  </span>
+                  LinkedIn
+                </a>
+              </li>
+            ) : null}
+            {socialLinks?.github ? (
+              <li>
+                <a href={socialLinks.github} target="_blank" rel="noreferrer">
+                  <span className="inline-icon" aria-hidden="true">
+                    <Github size={16} />
+                  </span>
+                  GitHub
+                </a>
+              </li>
+            ) : null}
+            {socialLinks?.twitter ? (
+              <li>
+                <a href={socialLinks.twitter} target="_blank" rel="noreferrer">
+                  <span className="inline-icon" aria-hidden="true">
+                    <Twitter size={16} />
+                  </span>
+                  X
+                </a>
+              </li>
+            ) : null}
           </ul>
         </section>
       </main>
