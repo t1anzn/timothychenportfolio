@@ -84,6 +84,7 @@ export type SiteSettings = {
   experience?: ExperienceItem[];
   socialLinks?: SocialLinks;
   cvUrl?: string;
+  cvFileName?: string;
   siteTitle?: string;
   projectsPageTitle?: string;
 };

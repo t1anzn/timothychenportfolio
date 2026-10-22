@@ -298,6 +298,10 @@
     cursor: pointer;
   }
 
+  a.tab {
+    text-decoration: none;
+  }
+
   .tab:hover {
     text-decoration: underline;
     text-underline-offset: 0.15em;
@@ -440,6 +444,58 @@
 
   .media-item figcaption {
     margin-top: 0.35rem;
+  }
+
+  .cv-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .cv-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: var(--foreground);
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .cv-action-btn:hover {
+    background-color: var(--secondary);
+    border-color: var(--ring);
+  }
+
+  .pdf-viewer {
+    margin: 1rem 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .pdf-frame {
+    display: block;
+    width: 100%;
+    height: 80vh;
+    min-height: 480px;
+    border: 0;
+  }
+
+  .pdf-fallback {
+    padding: 1.25rem;
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    .pdf-frame {
+      height: 70vh;
+      min-height: 400px;
+    }
   }
 
   .cv h1 {

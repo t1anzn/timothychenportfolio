@@ -51,7 +51,8 @@ export const siteSettingsQuery = groq`
     education,
     experience,
     socialLinks,
-    cvUrl,
+    "cvUrl": cvFile.asset->url,
+    "cvFileName": cvFile.asset->originalFilename,
     siteTitle,
     projectsPageTitle
   }

@@ -123,11 +123,12 @@ export default defineType({
       ],
     }),
     defineField({
-      name: "cvUrl",
-      title: "CV file path",
-      type: "string",
+      name: "cvFile",
+      title: "CV / Résumé (PDF)",
+      type: "file",
+      options: { accept: "application/pdf" },
       description:
-        "Path to the CV file in /public (e.g. /TimothyChenCV.pdf). Kept as a static file rather than a Sanity asset since it rarely changes.",
+        "Upload your CV as a PDF. Visitors can view and download it on the /cv page. Replace this file any time to update your CV site-wide.",
     }),
     defineField({
       name: "siteTitle",

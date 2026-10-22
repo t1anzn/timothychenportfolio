@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Github, Linkedin, Twitter } from "lucide-react";
+import { FileText, Github, Linkedin, Twitter } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { urlFor } from "@/sanity/lib/image";
@@ -60,7 +60,7 @@ export default function HomeClient({
     return () => window.removeEventListener("hashchange", syncTabFromHash);
   }, []);
 
-  const { socialLinks } = siteSettings;
+  const { socialLinks, cvUrl } = siteSettings;
 
   const contactIcons = (
     <div className="contact-icons" aria-label="Social links">
@@ -128,6 +128,17 @@ export default function HomeClient({
                     {t.label}
                   </button>
                 ))}
+                {cvUrl ? (
+                  <Link
+                    className="tab"
+                    href="/cv"
+                    onClick={() =>
+                      mobileMenuRef.current?.removeAttribute("open")
+                    }
+                  >
+                    cv / resume
+                  </Link>
+                ) : null}
               </nav>
               <div className="mobile-menu-footer muted" aria-label="Contacts">
                 <a href={`mailto:${siteSettings.email}`}>{siteSettings.email}</a>
@@ -162,6 +173,11 @@ export default function HomeClient({
               {t.label}
             </button>
           ))}
+          {cvUrl ? (
+            <Link className="tab" href="/cv">
+              cv / resume
+            </Link>
+          ) : null}
         </nav>
 
         <div className="cv-sidebar-footer muted">
@@ -339,6 +355,16 @@ export default function HomeClient({
 
           <h2>Links</h2>
           <ul>
+            {cvUrl ? (
+              <li>
+                <Link href="/cv">
+                  <span className="inline-icon" aria-hidden="true">
+                    <FileText size={16} />
+                  </span>
+                  View my CV
+                </Link>
+              </li>
+            ) : null}
             {socialLinks?.linkedin ? (
               <li>
                 <a href={socialLinks.linkedin} target="_blank" rel="noreferrer">

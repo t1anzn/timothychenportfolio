@@ -52,6 +52,22 @@ async function imageField(filename) {
   return { _type: "image", asset: await uploadImage(filename) };
 }
 
+async function uploadFile(filename) {
+  if (uploadedAssets.has(filename)) return uploadedAssets.get(filename);
+  const filePath = path.join(PUBLIC_DIR, filename);
+  const buffer = fs.readFileSync(filePath);
+  const asset = await client.assets.upload("file", buffer, { filename });
+  const ref = { _type: "reference", _ref: asset._id };
+  uploadedAssets.set(filename, ref);
+  console.log(`  uploaded file: ${filename} -> ${asset._id}`);
+  return ref;
+}
+
+async function fileField(filename) {
+  if (!filename) return undefined;
+  return { _type: "file", asset: await uploadFile(filename) };
+}
+
 // ---------------------------------------------------------------------------
 // Merged project data (union of content/projects.md + the old hardcoded
 // array in app/projects/[slug]/page.tsx). `order` matches the previous
@@ -314,7 +330,7 @@ const siteSettingsData = {
     github: "https://github.com/t1anzn",
     twitter: "https://x.com/timtianye",
   },
-  cvUrl: "/TimothyChenCV.pdf",
+  cvFile: "TimothyChenCV.pdf",
   siteTitle: "Timothy Chen - Developer Portfolio",
   projectsPageTitle: "Projects | Timothy Chen",
 };
@@ -323,7 +339,8 @@ const siteSettingsData = {
 // now (hand-transcribed from content/now.md)
 // ---------------------------------------------------------------------------
 const nowItems = [
-  "second year bsc (hons) computer science at ual cci, studying software engineering, critical interfaces (hci), and global perspectives on computer science.",
+  "final year bsc (hons) computer science at ual cci, studying ai and intelligent systems, evaluating user experience in digital technologies, and cybersecurity.",
+  "reverse engineering apple's spatial reframing in a computer vision pipeline: a u-net cnn for subject segmentation paired with monocular depth estimation to reconstruct scene geometry and reframe it with depth-aware parallax.",
   "working towards the aws cloud practitioner certificate, focusing on core services + fundamentals (iam, vpc, ec2, s3), security best practices, and pricing.",
   "founding growth intern at selah — an email-first bible reading service. running growth experiments, owning social content, and building ai tooling to scale what works.",
 ];
@@ -383,6 +400,7 @@ async function migrateProjects() {
 
 async function migrateSiteSettings() {
   const portrait = await imageField(siteSettingsData.portraitFile);
+  const cvFile = await fileField(siteSettingsData.cvFile);
   const doc = {
     _id: "siteSettings",
     _type: "siteSettings",
@@ -397,7 +415,7 @@ async function migrateSiteSettings() {
     education: siteSettingsData.education,
     experience: siteSettingsData.experience,
     socialLinks: siteSettingsData.socialLinks,
-    cvUrl: siteSettingsData.cvUrl,
+    cvFile,
     siteTitle: siteSettingsData.siteTitle,
     projectsPageTitle: siteSettingsData.projectsPageTitle,
   };
