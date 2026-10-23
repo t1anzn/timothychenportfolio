@@ -1,39 +1,40 @@
-import HomeClient from "./components/HomeClient";
+import Landing from "./components/Landing";
+import { PROJECTS, type WorkProject } from "./components/landing-data";
 import { client } from "@/sanity/lib/client";
-import { nowQuery, projectsQuery, siteSettingsQuery } from "@/sanity/lib/queries";
-import type { NowData, ProjectListItem, SiteSettings } from "@/sanity/lib/types";
+import { urlFor } from "@/sanity/lib/image";
+import { projectsQuery } from "@/sanity/lib/queries";
+import type { ProjectListItem } from "@/sanity/lib/types";
 
-function formatNowDate(isoDate: string) {
-  return new Date(isoDate)
-    .toLocaleDateString("en-GB", { month: "short", year: "numeric" })
-    .toLowerCase();
-}
-
-export default async function Page() {
-  const [projects, siteSettings, now] = await Promise.all([
-    client.fetch<ProjectListItem[]>(
+// The Work section is the site's list of projects: it reads them from Sanity, in the
+// order set there, hides the ones marked hidden, and links each to its own page.
+// If Sanity cannot be reached it falls back to a built-in list rather than showing
+// nothing.
+async function loadProjects(): Promise<WorkProject[]> {
+  try {
+    const all = await client.fetch<ProjectListItem[]>(
       projectsQuery,
       {},
       { next: { revalidate: 45 } }
-    ),
-    client.fetch<SiteSettings>(
-      siteSettingsQuery,
-      {},
-      { next: { revalidate: 45 } }
-    ),
-    client.fetch<{ items: string[]; updatedAt: string } | null>(
-      nowQuery,
-      {},
-      { next: { revalidate: 45 } }
-    ),
-  ]);
+    );
+    const visible = all.filter((p) => !p.hidden && p.slug);
+    if (!visible.length) return PROJECTS;
+    return visible.map((p) => ({
+      title: p.title,
+      slug: p.slug,
+      year: p.year ?? "",
+      status: p.status ?? "",
+      skills: p.skills ?? [],
+      summary: p.summary ?? "",
+      // Cropped to 16:10 whatever the original shape, so every card's picture lines up.
+      thumb: p.thumbnail
+        ? urlFor(p.thumbnail).width(480).height(300).fit("crop").auto("format").url()
+        : undefined,
+    }));
+  } catch {
+    return PROJECTS;
+  }
+}
 
-  const nowData: NowData = {
-    date: now?.updatedAt ? formatNowDate(now.updatedAt) : "",
-    items: now?.items ?? [],
-  };
-
-  return (
-    <HomeClient nowData={nowData} projects={projects} siteSettings={siteSettings} />
-  );
+export default async function Page() {
+  return <Landing projects={await loadProjects()} />;
 }
