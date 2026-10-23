@@ -9,9 +9,13 @@ const RAMP = " .:-=+*#%@";
 // A project's thumbnail, shown as ASCII at rest: the image is shrunk to a grid, each
 // cell is given a character by how bright it is, and the result is drawn in white on
 // the black. Hovering the card (the CSS in landing.css does this) fades the real image
-// in over it. If the image cannot be read (the browser blocks reading its pixels), the
-// image is shown in greyscale instead. With no image at all it is an empty frame with
-// the glyph in it.
+// in over it. If the image cannot be read (the image host does not allow this site to
+// read its pixels, as on a preview URL it has not been told about), the image is shown
+// in greyscale instead. With no image at all it is an empty frame with the glyph in it.
+//
+// The <img> shown to the visitor is a plain image request, which needs no permission, so
+// it always loads. Only the separate request used to build the ASCII asks for the pixels,
+// and that is the one that can be refused.
 export default function AsciiThumb({ src, alt }: { src?: string; alt: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [plain, setPlain] = useState(false);
@@ -85,7 +89,7 @@ export default function AsciiThumb({ src, alt }: { src?: string; alt: string }) 
   return (
     <div className="p-thumb" data-plain={plain}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} loading="lazy" crossOrigin="anonymous" />
+      <img src={src} alt={alt} loading="lazy" />
       <canvas ref={canvasRef} aria-hidden="true" />
     </div>
   );
