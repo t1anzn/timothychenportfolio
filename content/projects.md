@@ -13,7 +13,7 @@ year: 2026
 status: Work in Progress
 thumb: /placeholder.svg
 skills: iot, data, ai
-summary: visual + comparative analysis of AI workload energy consumption using the university's existing zigbee telemetry infrastructure.
+summary: full-stack platform that meters the energy cost of AI training runs from a smart-plug sensor and visualises it in a live dashboard.
 
 ---
 

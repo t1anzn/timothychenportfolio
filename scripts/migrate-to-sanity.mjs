@@ -113,10 +113,25 @@ const projects = [
     title: "Compute Energy Analytics System (CEAS)",
     year: "2026",
     status: "Work in Progress",
+    category: "Full Stack / IoT Analytics",
     summary:
-      "visual + comparative analysis of AI workload energy consumption using the university's existing zigbee telemetry infrastructure.",
-    skills: ["iot", "data", "ai"],
-    thumbnailFile: null, // no real thumbnail yet, falls back to /placeholder.svg on the site
+      "full-stack platform that meters the energy cost of AI training runs from a smart-plug sensor and visualises it in a live dashboard.",
+    description:
+      "CEAS is a full-stack platform for measuring, recording and visualising the energy consumption of AI/ML training workloads. Training runs are launched through a Node CLI that samples real-time power draw from a smart-plug sensor every second, integrates it into total watt-hours, and persists each run as a session. A React dashboard then charts that history, streams live training logs, and can trigger runs remotely.",
+    skills: ["React", "Node.js", "Express", "Python", "PyTorch", "IoT"],
+    features: [
+      "CLI-first workflow: run a preset or script with epochs, batch size and learning-rate flags",
+      "Real-time energy metering: smart-plug power sampled every second and integrated into Wh (energy = power × time)",
+      "Live training log streaming to the browser over Server-Sent Events",
+      "Session history with workload, timestamps, duration and energy totals",
+      "Analytics dashboard with energy-over-time chart, per-workload donut breakdown and summary stats",
+      "Side-by-side comparison of two sessions with a percentage energy delta",
+      "Shared file lock guarantees a single training job at a time, with admin unlock for stale locks",
+      "Python workloads: CIFAR-10, WikiText-2 (Hugging Face), synthetic and Iris",
+    ],
+    challenges:
+      "Coordinating one-run-at-a-time safety across the backend and CLI processes with a shared file lock, accurately integrating noisy 1 Hz power readings into energy totals, and proxying the upstream sensor API securely while streaming live logs from a spawned child process.",
+    thumbnailFile: null, // images are managed in Sanity Studio
     hidden: false,
     order: 1,
     media: [],
