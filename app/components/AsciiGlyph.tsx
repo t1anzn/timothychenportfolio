@@ -17,6 +17,7 @@ const SPIN_PITCH = 0.14; // the slight tilt it keeps while spinning
 const LOOK_RANGE = 170; // px beyond the glyph's own size within which it faces the cursor
 const LOOK_BAND = 50; // px at the outer edge of that range over which it eases from spinning to facing
 const LOOK_IN = 3.2; // how fast it turns to look at the cursor (per second)
+const LOOK_PULL = 12; // how hard the turn is drawn to the cursor once it is looking (per second)
 const LOOK_OUT = 1.4; // how fast it lets go and resumes spinning (per second)
 const GLYPH_BOX = 0.62; // glyph size as a share of the shorter viewport side
 const GLYPH_MAX_PX = 832;
@@ -144,9 +145,8 @@ export default function AsciiGlyph() {
       return Number.isNaN(g) ? 1 : g;
     };
     const pose = { yaw: REST_YAW, pitch: 0 };
-    // Spinning: spin is the angle it has turned to, and look is how much it is
+    // Spinning: the yaw carries the angle it has turned to, and look is how much it is
     // looking at the cursor instead (0 spinning freely, 1 facing the cursor).
-    let spin = REST_YAW;
     let look = 0;
     // Where the glyph is on screen, in px, so the cursor's gaze is measured from its centre.
     const geom = { x: 0, y: 0, r: 1 };
@@ -321,7 +321,6 @@ export default function AsciiGlyph() {
         ? clamp((geom.r + LOOK_RANGE - fromCentre) / LOOK_BAND, 0, 1)
         : 0;
       look += (lookTarget - look) * (1 - Math.exp(-dt * (lookTarget > look ? LOOK_IN : LOOK_OUT)));
-      spin = wrapAngle(spin + dt * SPIN_SPEED * (1 - look));
       // Aim the front face at the cursor. The cursor is treated as sitting a little in
       // front of the glyph (gaze px away), so the glyph turns by the angle between
       // straight ahead and the direction from its centre to the cursor, sideways and
@@ -330,8 +329,13 @@ export default function AsciiGlyph() {
       const gaze = geom.r * 1.3;
       const lookYaw = clamp(Math.atan2(cursor.x - geom.x, gaze), -MAX_YAW, MAX_YAW);
       const lookPitch = clamp(-Math.atan2(cursor.y - geom.y, gaze), -MAX_PITCH, MAX_PITCH);
-      // Blend by the shortest way round, so there is no swing when it hands over.
-      pose.yaw = lookYaw + (1 - look) * wrapAngle(spin - lookYaw);
+      // The yaw is carried from frame to frame, never recomputed from a blend of two
+      // angles: a blend of the spin angle and the look angle jumps whenever the spin
+      // passes the point directly opposite the look angle, which is the glitch you saw.
+      // Instead it keeps spinning (less as it looks) and is drawn towards the look
+      // angle by the short way round, so it only ever moves, never jumps.
+      const spun = pose.yaw + dt * SPIN_SPEED * (1 - look);
+      pose.yaw = wrapAngle(spun + wrapAngle(lookYaw - spun) * (1 - Math.exp(-dt * LOOK_PULL * look)));
       pose.pitch = look * lookPitch + (1 - look) * SPIN_PITCH;
 
       // Once fully dissolved there is nothing left to draw.

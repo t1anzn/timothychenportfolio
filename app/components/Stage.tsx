@@ -28,7 +28,7 @@ const isSection = (v: string): v is SectionId => SECTIONS.some((s) => s.id === v
 // between the two. Choosing a star dissolves the ASCII glyph (by easing --p on
 // the page root, which AsciiGlyph reads); choosing it again, or Esc, closes it.
 // Switching between sections is an instant swap.
-export default function Stage({ projects }: { projects: WorkProject[] }) {
+export default function Stage({ projects, portrait }: { projects: WorkProject[]; portrait?: string }) {
   const [open, setOpen] = useState<SectionId | null>(null);
   const reduce = useRef(false);
 
@@ -85,7 +85,7 @@ export default function Stage({ projects }: { projects: WorkProject[] }) {
         <div className="void-stack">
           <section className="void-panel" aria-label={open}>
             <div className="void-panel-body">
-              <SectionBody id={open} projects={projects} />
+              <SectionBody id={open} projects={projects} portrait={portrait} />
             </div>
           </section>
         </div>
@@ -133,18 +133,32 @@ export default function Stage({ projects }: { projects: WorkProject[] }) {
   );
 }
 
-function SectionBody({ id, projects }: { id: SectionId; projects: WorkProject[] }) {
-  if (id === "about") return <About />;
+function SectionBody({ id, projects, portrait }: { id: SectionId; projects: WorkProject[]; portrait?: string }) {
+  if (id === "about") return <About portrait={portrait} />;
   if (id === "now") return <Now />;
   if (id === "work") return <Work projects={projects} />;
   return <Contact />;
 }
 
-function About() {
-  return (
+function About({ portrait }: { portrait?: string }) {
+  const content = (
     <>
       <p className="p-big">{INTRO}</p>
       <p className="p-where void-mono">{LOCATION}</p>
+
+      <span className="void-mono p-stack-title">Technical skills</span>
+      <dl className="p-stack">
+        {STACK.map((group) => (
+          <div key={group.label}>
+            <dt className="void-mono">{group.label}</dt>
+            <dd>
+              {group.items.map((item) => (
+                <span key={item}>{item}</span>
+              ))}
+            </dd>
+          </div>
+        ))}
+      </dl>
 
       <div className="p-cols">
         <div>
@@ -164,20 +178,17 @@ function About() {
           </ul>
         </div>
       </div>
-
-      <dl className="p-stack">
-        {STACK.map((group) => (
-          <div key={group.label}>
-            <dt className="void-mono">{group.label}</dt>
-            <dd>
-              {group.items.map((item) => (
-                <span key={item}>{item}</span>
-              ))}
-            </dd>
-          </div>
-        ))}
-      </dl>
     </>
+  );
+
+  // With a portrait it is the main element of the section: a tall picture down the left
+  // that stays in view while the rest scrolls beside it.
+  if (!portrait) return content;
+  return (
+    <div className="p-about">
+      <AsciiThumb src={portrait} alt="Timothy Chen" className="p-thumb-portrait" />
+      <div className="p-about-main">{content}</div>
+    </div>
   );
 }
 
@@ -312,19 +323,27 @@ function Work({ projects }: { projects: WorkProject[] }) {
 
 function Contact() {
   return (
-    <>
+    <div className="p-contact">
+      <span className="void-mono p-contact-label">Get in touch</span>
       <a className="p-email" href={`mailto:${CONTACT.email}`}>
         {CONTACT.email}
       </a>
-      <ul className="p-links void-mono">
+
+      <ul className="p-reach">
         {CONTACT.links.map((l) => (
           <li key={l.label}>
             <a href={l.href} target="_blank" rel="noreferrer">
-              {l.label}
+              <span className="void-mono">{l.label}</span>
+              <span className="p-reach-handle">{l.handle}</span>
+              <span className="p-reach-go void-mono" aria-hidden="true" />
             </a>
           </li>
         ))}
+        <li className="p-reach-static">
+          <span className="void-mono">Based in</span>
+          <span className="p-reach-handle">London, UK</span>
+        </li>
       </ul>
-    </>
+    </div>
   );
 }

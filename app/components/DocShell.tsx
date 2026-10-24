@@ -20,9 +20,7 @@ export default function DocShell({ children }: { children: React.ReactNode }) {
           Home
         </Link>
         <span className="void-name">Timothy Chen</span>
-        <Link className="void-cv" href="/cv">
-          CV
-        </Link>
+        <span aria-hidden="true" />
       </header>
 
       {children}

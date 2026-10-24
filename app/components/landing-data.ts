@@ -115,8 +115,8 @@ export const PROJECTS: WorkProject[] = [
 export const CONTACT = {
   email: "timothy.chen188@gmail.com",
   links: [
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/timothychenldn/" },
-    { label: "GitHub", href: "https://github.com/t1anzn" },
-    { label: "X", href: "https://x.com/timtianye" },
+    { label: "LinkedIn", handle: "in/timothychenldn", href: "https://www.linkedin.com/in/timothychenldn/" },
+    { label: "GitHub", handle: "t1anzn", href: "https://github.com/t1anzn" },
+    { label: "X", handle: "@timtianye", href: "https://x.com/timtianye" },
   ],
 };

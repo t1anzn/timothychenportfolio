@@ -16,7 +16,7 @@ const RAMP = " .:-=+*#%@";
 // The <img> shown to the visitor is a plain image request, which needs no permission, so
 // it always loads. Only the separate request used to build the ASCII asks for the pixels,
 // and that is the one that can be refused.
-export default function AsciiThumb({ src, alt }: { src?: string; alt: string }) {
+export default function AsciiThumb({ src, alt, className }: { src?: string; alt: string; className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [plain, setPlain] = useState(false);
 
@@ -87,7 +87,7 @@ export default function AsciiThumb({ src, alt }: { src?: string; alt: string }) 
   }
 
   return (
-    <div className="p-thumb" data-plain={plain}>
+    <div className={className ? `p-thumb ${className}` : "p-thumb"} data-plain={plain}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={src} alt={alt} loading="lazy" />
       <canvas ref={canvasRef} aria-hidden="true" />
