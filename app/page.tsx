@@ -1,8 +1,8 @@
 import Landing from "./components/Landing";
-import { PROJECTS, type WorkProject } from "./components/landing-data";
+import { HACKATHONS, PROJECTS, type Hackathon, type WorkProject } from "./components/landing-data";
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
-import { projectsQuery, siteSettingsQuery } from "@/sanity/lib/queries";
+import { hackathonsQuery, projectsQuery, siteSettingsQuery } from "@/sanity/lib/queries";
 import type { ProjectListItem, SiteSettings } from "@/sanity/lib/types";
 
 // The Work section is the site's list of projects: it reads them from Sanity, in the
@@ -52,7 +52,21 @@ async function loadPortrait(): Promise<string | undefined> {
   }
 }
 
+// The hackathon count and list in About come from Sanity, so adding one there updates both.
+async function loadHackathons(): Promise<Hackathon[]> {
+  try {
+    const rows = await client.fetch<Hackathon[]>(hackathonsQuery, {}, { next: { revalidate: 45 } });
+    return rows.length ? rows : HACKATHONS;
+  } catch {
+    return HACKATHONS;
+  }
+}
+
 export default async function Page() {
-  const [projects, portrait] = await Promise.all([loadProjects(), loadPortrait()]);
-  return <Landing projects={projects} portrait={portrait} />;
+  const [projects, portrait, hackathons] = await Promise.all([
+    loadProjects(),
+    loadPortrait(),
+    loadHackathons(),
+  ]);
+  return <Landing projects={projects} portrait={portrait} hackathons={hackathons} />;
 }

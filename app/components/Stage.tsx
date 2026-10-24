@@ -7,13 +7,13 @@ import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "rea
 
 import {
   CONTACT,
-  FACTS,
   INTERESTS,
   INTRO,
   LOCATION,
   NOW,
   SECTIONS,
   STACK,
+  type Hackathon,
   type SectionId,
   type WorkProject,
 } from "./landing-data";
@@ -28,7 +28,15 @@ const isSection = (v: string): v is SectionId => SECTIONS.some((s) => s.id === v
 // between the two. Choosing a star dissolves the ASCII glyph (by easing --p on
 // the page root, which AsciiGlyph reads); choosing it again, or Esc, closes it.
 // Switching between sections is an instant swap.
-export default function Stage({ projects, portrait }: { projects: WorkProject[]; portrait?: string }) {
+export default function Stage({
+  projects,
+  portrait,
+  hackathons,
+}: {
+  projects: WorkProject[];
+  portrait?: string;
+  hackathons: Hackathon[];
+}) {
   const [open, setOpen] = useState<SectionId | null>(null);
   const reduce = useRef(false);
 
@@ -85,7 +93,7 @@ export default function Stage({ projects, portrait }: { projects: WorkProject[];
         <div className="void-stack">
           <section className="void-panel" aria-label={open}>
             <div className="void-panel-body">
-              <SectionBody id={open} projects={projects} portrait={portrait} />
+              <SectionBody id={open} projects={projects} portrait={portrait} hackathons={hackathons} />
             </div>
           </section>
         </div>
@@ -133,15 +141,70 @@ export default function Stage({ projects, portrait }: { projects: WorkProject[];
   );
 }
 
-function SectionBody({ id, projects, portrait }: { id: SectionId; projects: WorkProject[]; portrait?: string }) {
-  if (id === "about") return <About portrait={portrait} />;
+function SectionBody({
+  id,
+  projects,
+  portrait,
+  hackathons,
+}: {
+  id: SectionId;
+  projects: WorkProject[];
+  portrait?: string;
+  hackathons: Hackathon[];
+}) {
+  if (id === "about") return <About portrait={portrait} hackathons={hackathons} />;
   if (id === "now") return <Now />;
   if (id === "work") return <Work projects={projects} />;
   return <Contact />;
 }
 
-function About({ portrait }: { portrait?: string }) {
-  const content = (
+function About({ portrait, hackathons }: { portrait?: string; hackathons: Hackathon[] }) {
+  const [showHacks, setShowHacks] = useState(false);
+
+  // Just the count until it is clicked, so the list can grow without crowding About.
+  const hackathonList = hackathons.length ? (
+    <div className="p-hacks">
+      <button
+        type="button"
+        className="p-hacks-toggle"
+        aria-expanded={showHacks}
+        onClick={() => setShowHacks((v) => !v)}
+      >
+        <span className="p-hacks-count">{hackathons.length}</span>
+        <span className="void-mono p-hacks-label">{hackathons.length === 1 ? "hackathon" : "hackathons"}</span>
+        <span className="p-hacks-action void-mono" aria-hidden="true">
+          {showHacks ? "← back to about" : "open journal →"}
+        </span>
+      </button>
+    </div>
+  ) : null;
+
+  // Opening the count swaps the text beside the portrait for the journal.
+  const journal = (
+    <div className="p-journal" role="region" aria-label="Hackathon journal">
+      <div className="p-journal-head void-mono">
+        <span>hackathon journal</span>
+        <button type="button" className="p-journal-back" onClick={() => setShowHacks(false)}>
+          <span aria-hidden="true">{"←"}</span> back to about
+        </button>
+      </div>
+      <ol>
+        {hackathons.map((item, i) => (
+          <li key={item.title} style={{ animationDelay: `${120 + Math.min(i * 70, 900)}ms` }}>
+            <span className="p-journal-no void-mono">{String(i + 1).padStart(2, "0")}</span>
+            <span className="p-journal-name">{item.title}</span>
+            {item.placement ? (
+              <span className="p-journal-place void-mono">{item.placement}</span>
+            ) : null}
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+
+  const content = showHacks ? (
+    journal
+  ) : (
     <>
       <p className="p-big">{INTRO}</p>
       <p className="p-where void-mono">{LOCATION}</p>
@@ -169,24 +232,20 @@ function About({ portrait }: { portrait?: string }) {
             ))}
           </ul>
         </div>
-        <div>
-          <span className="void-mono">Fun facts</span>
-          <ul className="p-facts">
-            {FACTS.map((fact) => (
-              <li key={fact}>{fact}</li>
-            ))}
-          </ul>
-        </div>
+        {portrait ? null : hackathonList}
       </div>
     </>
   );
 
-  // With a portrait it is the main element of the section: a tall picture down the left
-  // that stays in view while the rest scrolls beside it.
+  // With a portrait it is the main element of the section: a tall picture down the left,
+  // with the hackathon list beneath it, that stays in view while the rest scrolls beside it.
   if (!portrait) return content;
   return (
     <div className="p-about">
-      <AsciiThumb src={portrait} alt="Timothy Chen" className="p-thumb-portrait" />
+      <div className="p-about-side">
+        <AsciiThumb src={portrait} alt="Timothy Chen" className="p-thumb-portrait" />
+        {hackathonList}
+      </div>
       <div className="p-about-main">{content}</div>
     </div>
   );

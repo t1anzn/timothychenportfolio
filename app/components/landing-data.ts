@@ -14,10 +14,15 @@ export const INTRO =
 
 export const LOCATION = "Based in London, UK";
 
-export const FACTS = [
-  "Shook hands with the Queen.",
-  "Radiant in Valorant, top 500 in Europe, with tournament experience.",
-  "ABRSM Advanced Certificate (Piano), beyond Grade 8.",
+// A hackathon as the About journal shows it. placement is only set where there was one.
+export type Hackathon = { title: string; placement?: string };
+
+export const HACKATHONS: Hackathon[] = [
+  { title: "HackSprint '25" },
+  { title: "MeetStream.ai Voice Agents", placement: "3rd" },
+  { title: "Perplexity London" },
+  { title: "NVIDIA Hack for Impact" },
+  { title: "Grok Bot Community Engineering", placement: "Top 5" },
 ];
 
 export const STACK = [

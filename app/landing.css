@@ -408,6 +408,14 @@
   margin-top: clamp(1.5rem, 5dvh, 3rem);
 }
 
+.p-facts.p-facts-small {
+  font-size: clamp(0.9rem, 1.1vw, 1rem);
+}
+
+.p-facts-small li {
+  padding: 0.2rem 0;
+}
+
 .p-cols .void-mono {
   display: block;
   margin-bottom: 1rem;
@@ -550,9 +558,160 @@
   align-items: start;
 }
 
-.p-about > .p-thumb-portrait {
+.p-about > .p-about-side {
   position: sticky;
   top: 0;
+}
+
+.p-hacks {
+  margin-top: 1.5rem;
+}
+
+.p-hacks-toggle {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.7rem 0 0;
+  border: 0;
+  border-top: 1px solid var(--void-line);
+  background: none;
+  color: var(--void-soft);
+  cursor: pointer;
+  text-align: left;
+}
+
+.p-hacks-count {
+  color: var(--void-fg);
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.p-hacks-toggle .p-hacks-label {
+  display: inline;
+  margin: 0;
+  color: var(--void-fg);
+  font-size: clamp(1rem, 1.5vw, 1.35rem);
+}
+
+.p-hacks-toggle {
+  flex-wrap: wrap;
+  row-gap: 0.5rem;
+}
+
+.p-hacks-action {
+  flex-basis: 100%;
+  color: var(--void-soft);
+  font-size: 0.8rem;
+  transition: color 0.3s, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.p-hacks-toggle:hover .p-hacks-action {
+  color: var(--void-fg);
+  transform: translateX(4px);
+}
+
+.p-hacks-toggle[aria-expanded="true"] .p-hacks-action {
+  color: var(--void-fg);
+}
+
+.p-hacks-toggle[aria-expanded="true"]:hover .p-hacks-action {
+  transform: translateX(-4px);
+}
+
+/* The opened list takes the place of the About text beside the portrait: a large, quiet
+   index of entries that rise in one after another. */
+.p-journal {
+  animation: journal-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.p-journal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.9rem;
+  color: var(--void-dim);
+}
+
+.p-journal-head span:first-child {
+  color: var(--void-fg);
+}
+
+.p-journal-back {
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--void-line);
+  background: none;
+  color: var(--void-fg);
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  transition: border-color 0.3s, background 0.3s;
+}
+
+.p-journal-back:hover {
+  border-color: var(--void-fg);
+}
+
+.p-journal ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--void-line);
+}
+
+.p-journal li {
+  display: grid;
+  grid-template-columns: 3rem 1fr auto;
+  align-items: baseline;
+  padding: clamp(0.7rem, 2dvh, 1.1rem) 0;
+  border-bottom: 1px solid var(--void-line);
+  animation: void-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.p-journal-no {
+  color: var(--void-dim);
+}
+
+.p-journal-name {
+  color: var(--void-fg);
+  font-size: clamp(1.3rem, min(2.6vw, 4.2dvh), 2.2rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+/* A placement is marked with a star, like the sky line. */
+.p-journal-place {
+  align-self: center;
+  padding: 0.25rem 0.7rem;
+  border: 1px solid var(--void-fg);
+  color: var(--void-fg);
+  white-space: nowrap;
+}
+
+.p-journal-place::before {
+  content: "* ";
+}
+
+@keyframes journal-in {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-journal,
+  .p-journal li {
+    animation: none;
+  }
 }
 
 .p-about-main {
@@ -562,6 +721,7 @@
 .p-about-main .p-cols {
   grid-template-columns: 1fr;
   gap: 1.75rem;
+  margin-top: clamp(1.5rem, 4.5dvh, 2.75rem);
 }
 
 .p-about-main .p-big {
@@ -903,7 +1063,7 @@
   .p-about {
     grid-template-columns: 1fr;
   }
-  .p-about > .p-thumb-portrait {
+  .p-about > .p-about-side {
     position: relative;
     width: 12rem;
   }

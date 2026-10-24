@@ -64,3 +64,7 @@ export const nowQuery = groq`
     "updatedAt": _updatedAt
   }
 `;
+
+export const hackathonsQuery = groq`
+  *[_type == "hackathon"] | order(_createdAt asc){ title, placement }
+`;
