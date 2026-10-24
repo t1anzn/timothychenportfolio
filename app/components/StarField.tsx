@@ -5,8 +5,9 @@ import { useEffect, useRef } from "react";
 type Star = { x: number; y: number; z: number; tw: number };
 
 const STAR_COUNT = 170;
-const CELL_W = 7;
-const CELL_H = 11; // same grid as the glyph, so the sky and the glyph align
+const COARSE = typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
+const CELL_W = COARSE ? 9 : 7;
+const CELL_H = COARSE ? 14 : 11; // same grid as the glyph, so the sky and the glyph align
 const GLYPHS = [".", ".", ":", "+", "*"]; // far to near
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
@@ -54,7 +55,7 @@ export default function StarField() {
     };
 
     const draw = (now: number) => {
-      const dt = Math.min((now - last) / 1000, 0.05);
+      const dt = Math.min((now - last) / 1000, 0.1);
       last = now;
 
       // While a section is open the sky eases a short way along a diagonal.
@@ -88,7 +89,16 @@ export default function StarField() {
       if (!reduce) raf = requestAnimationFrame(draw);
     };
 
+    // Phone browsers resize the page whenever the address bar slides in or out. That is a
+    // change of a few dozen px in height only, so it must not rebuild the canvas mid-scroll.
+    let lastW = window.innerWidth;
+    let lastH = window.innerHeight;
     const onResize = () => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      if (w === lastW && Math.abs(h - lastH) < 160) return;
+      lastW = w;
+      lastH = h;
       resize();
       if (reduce) draw(performance.now());
     };

@@ -4,11 +4,15 @@ import { useEffect, useRef } from "react";
 
 const GLYPH = "天";
 const RAMP = " .:-=+*#%@";
-const LAYERS = 9; // extrusion slices, so the glyph reads as a slab when edge-on
+// Phones draw the glyph with a coarser grid, fewer slices and fewer samples, so a frame costs
+// a fraction of the desktop one and the spin and the dissolve stay smooth.
+const COARSE = typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
+const LAYERS = COARSE ? 4 : 9; // extrusion slices, so the glyph reads as a slab when edge-on
+const STEP = COARSE ? 3 : 2; // sampling stride
 const DEPTH = 0.22; // half-thickness in glyph units
 const SAMPLE = 180; // offscreen sampling resolution
-const CELL_W = 7;
-const CELL_H = 11; // CELL_H / CELL_W compensates for tall monospace cells
+const CELL_W = COARSE ? 9 : 7;
+const CELL_H = COARSE ? 14 : 11; // CELL_H / CELL_W compensates for tall monospace cells
 const MAX_YAW = 1.25; // the furthest (radians) it will turn sideways to face the cursor
 const MAX_PITCH = 0.85; // and up or down
 const REST_YAW = -0.3; // the still pose (reduced motion)
@@ -84,8 +88,8 @@ function sampleGlyph(): Point[] {
 
   const { data } = c.getImageData(0, 0, SAMPLE, SAMPLE);
   const pts: Point[] = [];
-  for (let py = 0; py < SAMPLE; py += 2) {
-    for (let px = 0; px < SAMPLE; px += 2) {
+  for (let py = 0; py < SAMPLE; py += STEP) {
+    for (let px = 0; px < SAMPLE; px += STEP) {
       if (data[(py * SAMPLE + px) * 4 + 3] < 128) continue;
       const x = (px / SAMPLE - 0.5) * 2;
       const y = (py / SAMPLE - 0.5) * 2;
@@ -289,7 +293,7 @@ export default function AsciiGlyph() {
     };
 
     const tick = (now: number) => {
-      dt = Math.min((now - last) / 1000, 0.05);
+      dt = Math.min((now - last) / 1000, 0.1);
       last = now;
       // The pose is worked out after the cursor has been eased, below.
 
@@ -351,6 +355,9 @@ export default function AsciiGlyph() {
     };
 
     const onPointer = (e: PointerEvent) => {
+      // A finger is not a cursor: left "active" after a tap it would hold the glyph facing
+      // that spot forever and stop it spinning.
+      if (e.pointerType === "touch") return;
       if (!cursor.active && cursor.x < -9000) {
         cursor.x = e.clientX;
         cursor.y = e.clientY;
@@ -364,7 +371,16 @@ export default function AsciiGlyph() {
       cursor.active = false;
     };
 
+    // Phone browsers resize the page whenever the address bar slides in or out. That is a
+    // change of a few dozen px in height only, so it must not rebuild the canvas mid-scroll.
+    let lastW = window.innerWidth;
+    let lastH = window.innerHeight;
     const onResize = () => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      if (w === lastW && Math.abs(h - lastH) < 160) return;
+      lastW = w;
+      lastH = h;
       resize();
       if (reduce) render(0);
     };

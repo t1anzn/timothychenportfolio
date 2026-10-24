@@ -1044,7 +1044,58 @@
   }
 }
 
+/* Touch screens: no film grain (a full-screen blended filter is costly to repaint on a
+   phone), larger tap targets on the sky line, and scrolling that stays inside the panel. */
+@media (hover: none) {
+  .void::after {
+    display: none;
+  }
+
+  /* A 28px blur over a full-screen canvas is far too heavy to animate on a phone: fade only. */
+  @keyframes void-resolve {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes journal-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .void-dock button {
+    min-height: 2.75rem;
+    padding: 0.5rem 0.6rem;
+  }
+
+  .void-panel-body {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 @media (max-width: 767px) {
+  .void-panel-body {
+    padding-right: 0.25rem;
+    scrollbar-gutter: auto;
+  }
+  .void-dock {
+    width: calc(100% - 1.5rem);
+  }
+  .dock-label {
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+  }
+  .p-about > .p-about-side {
+    width: min(12rem, 60%);
+  }
   .p-cols {
     grid-template-columns: 1fr;
   }
