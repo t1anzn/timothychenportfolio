@@ -338,7 +338,7 @@ export default function AsciiGlyph() {
       // passes the point directly opposite the look angle, which is the glitch you saw.
       // Instead it keeps spinning (less as it looks) and is drawn towards the look
       // angle by the short way round, so it only ever moves, never jumps.
-      const spun = pose.yaw + dt * SPIN_SPEED * (1 - look);
+      const spun = pose.yaw + dt * SPIN_SPEED * (reduce ? 0.5 : 1) * (1 - look);
       pose.yaw = wrapAngle(spun + wrapAngle(lookYaw - spun) * (1 - Math.exp(-dt * LOOK_PULL * look)));
       pose.pitch = look * lookPitch + (1 - look) * SPIN_PITCH;
 
@@ -382,18 +382,15 @@ export default function AsciiGlyph() {
       lastW = w;
       lastH = h;
       resize();
-      if (reduce) render(0);
     };
 
     resize();
-    if (reduce) {
-      pose.yaw = REST_YAW;
-      document.fonts.ready.then(() => {
-        resize();
-        render(0);
-      });
-    } else {
-      raf = requestAnimationFrame(tick);
+    // The glyph always turns, even with reduced motion on: phones often have it on by default
+    // (battery saver, accessibility defaults) and the page would sit frozen. It just turns
+    // more slowly, and does not chase the pointer or dissolve.
+    pose.yaw = REST_YAW;
+    raf = requestAnimationFrame(tick);
+    if (!reduce) {
       window.addEventListener("pointermove", onPointer);
       document.documentElement.addEventListener("pointerleave", onLeave);
     }

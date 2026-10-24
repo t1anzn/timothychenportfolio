@@ -63,11 +63,9 @@ export default function StarField() {
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (const st of stars) {
-        if (!reduce) {
-          st.y -= dt * 0.012 * (0.3 + st.z);
-          if (st.y < 0) st.y += 1;
-          st.tw += dt * (0.5 + st.z);
-        }
+        st.y -= dt * 0.012 * (0.3 + st.z);
+        if (st.y < 0) st.y += 1;
+        st.tw += dt * (0.5 + st.z);
         const depth = 0.1 + st.z * 0.9;
         const offX = pan * 0.18 * cols * depth;
         const offY = pan * 0.12 * rows * depth;
@@ -77,7 +75,7 @@ export default function StarField() {
 
         if (c < 0 || c >= cols || r < 0 || r >= rows) continue;
 
-        const pulse = reduce ? 1 : 0.6 + 0.4 * Math.sin(st.tw);
+        const pulse = 0.6 + 0.4 * Math.sin(st.tw);
         const tier = Math.min(
           GLYPHS.length - 1,
           Math.floor(st.z * GLYPHS.length + (pulse > 0.95 ? 1 : 0))
@@ -86,7 +84,7 @@ export default function StarField() {
         ctx.globalAlpha = (0.18 + st.z * 0.5) * pulse;
         ctx.fillText(glyph, Math.floor(c) * CELL_W, Math.floor(r) * CELL_H);
       }
-      if (!reduce) raf = requestAnimationFrame(draw);
+      raf = requestAnimationFrame(draw);
     };
 
     // Phone browsers resize the page whenever the address bar slides in or out. That is a
@@ -100,19 +98,11 @@ export default function StarField() {
       lastW = w;
       lastH = h;
       resize();
-      if (reduce) draw(performance.now());
     };
 
     resize();
-    if (reduce) {
-      // Wait for the mono font before the single static frame.
-      document.fonts.ready.then(() => {
-        resize();
-        draw(performance.now());
-      });
-    } else {
-      raf = requestAnimationFrame(draw);
-    }
+    // Always animated, slowly, even with reduced motion on (see AsciiGlyph).
+    raf = requestAnimationFrame(draw);
     window.addEventListener("resize", onResize);
 
     return () => {
