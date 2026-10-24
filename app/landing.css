@@ -639,22 +639,6 @@
   color: var(--void-fg);
 }
 
-.p-journal-back {
-  padding: 0.4rem 0.85rem;
-  border: 1px solid var(--void-line);
-  background: none;
-  color: var(--void-fg);
-  font: inherit;
-  letter-spacing: inherit;
-  text-transform: inherit;
-  cursor: pointer;
-  transition: border-color 0.3s, background 0.3s;
-}
-
-.p-journal-back:hover {
-  border-color: var(--void-fg);
-}
-
 .p-journal ol {
   margin: 0;
   padding: 0;

@@ -184,9 +184,7 @@ function About({ portrait, hackathons }: { portrait?: string; hackathons: Hackat
     <div className="p-journal" role="region" aria-label="Hackathon journal">
       <div className="p-journal-head void-mono">
         <span>hackathon journal</span>
-        <button type="button" className="p-journal-back" onClick={() => setShowHacks(false)}>
-          <span aria-hidden="true">{"←"}</span> back to about
-        </button>
+        <span>{String(hackathons.length).padStart(2, "0")} entries</span>
       </div>
       <ol>
         {hackathons.map((item, i) => (
