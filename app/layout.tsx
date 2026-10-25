@@ -1,6 +1,7 @@
 import type React from "react";
 import type { Metadata } from "next";
 import { PT_Serif } from "next/font/google";
+import PageTransition from "./components/PageTransition";
 import "./globals.css";
 
 const serif = PT_Serif({
@@ -22,7 +23,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={serif.variable}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <PageTransition />
+      </body>
     </html>
   );
 }

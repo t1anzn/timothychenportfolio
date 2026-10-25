@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import AsciiThumb from "./AsciiThumb";
+import { asciiTransition } from "./asciiTransition";
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
@@ -71,10 +72,27 @@ export default function Stage({
     return () => cancelAnimationFrame(raf);
   }, [open]);
 
-  const select = useCallback((id: SectionId | null) => {
+  const commit = useCallback((id: SectionId | null) => {
     setOpen(id);
     window.history.replaceState(null, "", id ? `#${id}` : window.location.pathname);
   }, []);
+
+  // Moving from one section to another runs the ASCII wipe over the panel; opening
+  // and closing are already the glyph dissolving, so they stay as they are.
+  const select = useCallback(
+    (id: SectionId | null) => {
+      const stack = document.querySelector<HTMLElement>(".void-stack");
+      if (!id || !open || id === open || !stack) return commit(id);
+      const t = asciiTransition({
+        box: () => stack.getBoundingClientRect(),
+        swap: () => commit(id),
+      });
+      if (!t) return commit(id);
+      // The reveal pass starts fully covered, so the new section has time to mount.
+      t.reveal();
+    },
+    [open, commit]
+  );
 
   useEffect(() => {
     if (!open) return;
@@ -346,7 +364,13 @@ function Work({ projects }: { projects: WorkProject[] }) {
         <ul className="p-work">
           {shown.map((p) => (
             <li key={p.slug ?? p.title}>
-              <AsciiThumb src={p.thumb} alt={p.title} />
+              {p.slug ? (
+                <Link className="p-thumb-link" href={`/projects/${p.slug}`} tabIndex={-1} aria-label={p.title}>
+                  <AsciiThumb src={p.thumb} alt="" />
+                </Link>
+              ) : (
+                <AsciiThumb src={p.thumb} alt={p.title} />
+              )}
               <div className="p-card">
                 <h3>
                   {p.slug ? (

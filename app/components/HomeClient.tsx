@@ -313,13 +313,25 @@ export default function HomeClient({
                 <div className="projects-item" key={p.slug}>
                   <div className="projects-left">
                     <div className="projects-thumb">
-                      <Image
-                        src={thumbUrl(p.thumbnail)}
-                        alt={`${p.title} thumbnail`}
-                        width={150}
-                        height={150}
-                        className="projects-thumb-img"
-                      />
+                      {p.slug ? (
+                        <Link href={`/projects/${p.slug}`} tabIndex={-1} aria-label={p.title}>
+                          <Image
+                            src={thumbUrl(p.thumbnail)}
+                            alt=""
+                            width={150}
+                            height={150}
+                            className="projects-thumb-img"
+                          />
+                        </Link>
+                      ) : (
+                        <Image
+                          src={thumbUrl(p.thumbnail)}
+                          alt={`${p.title} thumbnail`}
+                          width={150}
+                          height={150}
+                          className="projects-thumb-img"
+                        />
+                      )}
                     </div>
                     <div className="projects-text">
                       <div className="projects-title">

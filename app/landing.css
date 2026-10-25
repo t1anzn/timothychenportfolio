@@ -539,6 +539,10 @@
   transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.p-thumb-link {
+  display: block;
+}
+
 .p-work li:hover .p-thumb img {
   opacity: 1;
 }
